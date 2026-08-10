@@ -122,12 +122,21 @@
   }
 
   function persistCreator() {
-    if (!activeCreator || !window.CreatorPublicStore) return;
-    CreatorPublicStore.savePublicFields(activeCreator);
-    renderPostsList();
-    if (typeof window.onCreatorPublicUpdated === "function") {
-      window.onCreatorPublicUpdated(activeCreator);
+    if (!activeCreator || !window.CreatorPublicStore) {
+      return Promise.resolve();
     }
+    renderPostsList();
+    return CreatorPublicStore.savePublicFields(activeCreator)
+      .then(function () {
+        if (typeof window.onCreatorPublicUpdated === "function") {
+          window.onCreatorPublicUpdated(activeCreator);
+        }
+      })
+      .catch(function (err) {
+        console.error(err);
+        notifySaved("Saved on this device only — cloud sync failed. Check Firebase rules.");
+        throw err;
+      });
   }
 
   function fillProfileForm(creator) {
@@ -257,16 +266,20 @@
       youtube: document.getElementById("profile-youtube").value.trim()
     };
 
-    persistCreator();
-    notifySaved("Profile saved — live on your public page");
-
-    var note = document.getElementById("profile-save-note");
-    if (note) {
-      note.textContent = "Saved just now";
-      window.setTimeout(function () {
-        note.textContent = "";
-      }, 3000);
-    }
+    persistCreator()
+      .then(function () {
+        notifySaved("Profile saved — live on your public page");
+        var note = document.getElementById("profile-save-note");
+        if (note) {
+          note.textContent = "Saved just now";
+          window.setTimeout(function () {
+            note.textContent = "";
+          }, 3000);
+        }
+      })
+      .catch(function () {
+        /* toast already shown */
+      });
   }
 
   function handlePostSubmit(event) {
@@ -307,14 +320,18 @@
 
     if (existingIndex >= 0) {
       activeCreator.posts[existingIndex] = postData;
-      notifySaved("Post updated");
     } else {
       activeCreator.posts.unshift(postData);
-      notifySaved("Post published");
     }
 
-    persistCreator();
-    resetPostForm();
+    persistCreator()
+      .then(function () {
+        notifySaved(existingIndex >= 0 ? "Post updated" : "Post published");
+        resetPostForm();
+      })
+      .catch(function () {
+        /* toast already shown */
+      });
   }
 
   function deletePost(postId) {
@@ -325,8 +342,13 @@
     activeCreator.posts = activeCreator.posts.filter(function (p) {
       return p.id !== postId;
     });
-    persistCreator();
-    notifySaved("Post deleted");
+    persistCreator()
+      .then(function () {
+        notifySaved("Post deleted");
+      })
+      .catch(function () {
+        /* toast already shown */
+      });
   }
 
   function bindEvents() {

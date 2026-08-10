@@ -6,19 +6,18 @@
 }
 
 .dashboard-shell {
-  padding: calc(6.75rem + env(safe-area-inset-top)) var(--pad) 3rem;
+  padding: calc(9.5rem + env(safe-area-inset-top)) var(--pad) 3rem;
   max-width: 56rem;
   margin: 0 auto;
 }
 
 #login-view[hidden],
-#dashboard-view[hidden],
-#dash-section-nav[hidden] {
+#dashboard-view[hidden] {
   display: none !important;
 }
 
 body.dashboard-authed .dashboard-shell {
-  padding-top: calc(6.75rem + env(safe-area-inset-top));
+  padding-top: calc(9.5rem + env(safe-area-inset-top));
 }
 
 /* Partner tool header — independent of landing-page .nav rules */
@@ -26,7 +25,7 @@ body.dashboard-authed .dashboard-shell {
   flex-direction: column;
   align-items: stretch;
   gap: 0;
-  padding-bottom: 0.65rem;
+  padding-bottom: 0.85rem;
 }
 
 .partner-header-inner {
@@ -75,7 +74,7 @@ body.dashboard-authed .dashboard-shell {
 }
 
 .partners-tool-body .schedule-page {
-  padding-top: calc(7.25rem + env(safe-area-inset-top));
+  padding-top: calc(9.5rem + env(safe-area-inset-top));
 }
 
 .dashboard-header-bar {
@@ -84,6 +83,7 @@ body.dashboard-authed .dashboard-shell {
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
+  margin-top: 0.35rem;
   margin-bottom: 1.75rem;
 }
 
@@ -106,6 +106,10 @@ body.dashboard-authed .dashboard-shell {
   align-items: center;
   gap: 0.65rem;
   flex-wrap: wrap;
+}
+
+.dashboard-actions .btn {
+  min-height: 2.35rem;
 }
 
 .btn-sm {
@@ -259,6 +263,38 @@ body.dashboard-authed .dashboard-shell {
 .dash-panel-head span {
   font-size: 0.82rem;
   color: var(--muted);
+}
+
+/* Stronger section titles — Profile, Posts, Tool Kit */
+.dash-panel-head--section {
+  align-items: center;
+  margin: -0.15rem -0.15rem 1.15rem;
+  padding: 0 0 0.95rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.dash-panel-head--section h2 {
+  font-size: clamp(1.35rem, 3.2vw, 1.65rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #fff;
+  line-height: 1.15;
+  padding-left: 0.7rem;
+  border-left: 3px solid var(--orange);
+}
+
+.dash-finance {
+  margin-top: 0.5rem;
+  padding-top: 0.35rem;
+}
+
+.dash-finance-head {
+  margin: 0 0 1.15rem;
+  padding: 0 0 0.95rem;
+}
+
+.dash-finance .dash-grid-full {
+  margin-bottom: 1.25rem;
 }
 
 /* Progress */
@@ -490,47 +526,13 @@ body.dashboard-authed .dashboard-shell {
   transform: translateX(-50%) translateY(0);
 }
 
-/* In-dashboard section jump links (shown after sign-in) */
-.dash-section-nav {
-  display: none;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  margin: 0 0 1.25rem;
-  padding: 0;
-}
-
-.dash-section-nav::-webkit-scrollbar {
-  display: none;
-}
-
-body.dashboard-authed #dash-section-nav {
-  display: flex;
-}
-
-.dash-section-nav a {
-  flex: 0 0 auto;
-  padding: 0.42rem 0.8rem;
-  border-radius: 999px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  text-decoration: none;
-  color: var(--muted);
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.03);
-}
-
-.dash-section-nav a:hover {
-  color: var(--ink);
-  border-color: rgba(255, 255, 255, 0.22);
-}
-
 #overview,
 #page-profile-heading,
 #page-posts-heading,
 #share-heading,
 #earnings-heading,
 #payout-settings-heading {
-  scroll-margin-top: calc(6.5rem + env(safe-area-inset-top));
+  scroll-margin-top: calc(9.5rem + env(safe-area-inset-top));
 }
 
 .panel-note {
@@ -792,10 +794,5 @@ body.dashboard-authed #dash-section-nav {
   .partner-toolbar a {
     flex: 0 0 auto;
     font-size: 0.78rem;
-  }
-
-  .dash-section-nav a {
-    font-size: 0.78rem;
-    padding: 0.38rem 0.65rem;
   }
 }

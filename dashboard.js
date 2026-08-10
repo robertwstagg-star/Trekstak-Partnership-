@@ -79,11 +79,6 @@
             statusLabel: "Paid Mar 28"
           }
         ],
-        shareCaptions: [
-          "Planning a trip? I use TrekStak to stack neighborhoods, walks, and food stops in one place. My code CHRIS20 gets you 20% off your first year.",
-          "If you hate 40-tab trip planning like I do — TrekStak is worth a look. Code CHRIS20 for 20% off year one.",
-          "Quick planning win: pick a city, stak what you care about, walk the route. Try TrekStak with CHRIS20 (20% off first year)."
-        ],
         payoutMethod: {
           type: "E-transfer",
           email: "chris@demo.trekstakapp.com",
@@ -95,7 +90,6 @@
 
   var loginView = document.getElementById("login-view");
   var dashboardView = document.getElementById("dashboard-view");
-  var sectionNav = document.getElementById("dash-section-nav");
   var loginForm = document.getElementById("login-form");
   var loginError = document.getElementById("login-error");
   var signOutBtn = document.getElementById("sign-out");
@@ -127,8 +121,13 @@
   window.showDashboardToast = showToast;
 
   function withPublicMerge(creator) {
-    if (!creator || !window.CreatorPublicStore) return creator;
-    return CreatorPublicStore.mergePublicFields(creator);
+    if (!creator || !window.CreatorPublicStore) {
+      return Promise.resolve(creator);
+    }
+    if (CreatorPublicStore.mergePublicFieldsAsync) {
+      return CreatorPublicStore.mergePublicFieldsAsync(creator);
+    }
+    return Promise.resolve(CreatorPublicStore.mergePublicFields(creator));
   }
 
   function copyText(text, successMessage) {
@@ -286,37 +285,8 @@
       .join("");
   }
 
-  function renderShareCaptions(captions, code) {
-    if (!captions || !captions.length) return "";
-    return captions
-      .map(function (caption, index) {
-        var id = "caption-" + index;
-        return (
-          '<div class="share-card">' +
-          '<div class="share-card-head">' +
-          "<strong>Caption " +
-          (index + 1) +
-          "</strong>" +
-          '<button type="button" class="btn btn-outline btn-sm" data-copy-caption="' +
-          index +
-          '">Copy</button>' +
-          "</div>" +
-          '<textarea id="' +
-          id +
-          '" readonly aria-label="Caption ' +
-          (index + 1) +
-          '">' +
-          escapeHtml(caption) +
-          "</textarea>" +
-          "</div>"
-        );
-      })
-      .join("");
-  }
-
   function renderDashboard(data, creator) {
     try {
-      creator = withPublicMerge(creator);
       var stats = creator.stats || {};
     var travelTarget = data.travelRewardTarget || 500;
     var travelAmount = data.travelRewardAmount || 1000;
@@ -351,16 +321,15 @@
 
     document.getElementById("usage-chart").innerHTML = buildUsageChart(creator.dailyUses);
     document.getElementById("payout-rows").innerHTML = renderPayoutRows(creator.payouts);
-    document.getElementById("share-captions").innerHTML = renderShareCaptions(
-      creator.shareCaptions,
-      creator.promoCode
-    );
 
     var publicLink = document.getElementById("link-public-page");
     var publicPageUrl = document.getElementById("public-page-url");
     var publicDisplay = creator.publicPageUrl.replace(/^https:\/\//, "");
-    publicLink.href = creator.publicPageUrl;
-    publicLink.textContent = publicDisplay;
+    if (publicLink) {
+      publicLink.href = creator.publicPageUrl;
+      publicLink.textContent = "View public page";
+      publicLink.title = creator.publicPageUrl;
+    }
     if (publicPageUrl) publicPageUrl.textContent = publicDisplay;
 
     document.getElementById("link-app-store").href = creator.appStoreUrl;
@@ -401,19 +370,10 @@
     document.getElementById("btn-copy-app-store").onclick = function () {
       copyText(creator.appStoreUrl, "App Store link copied");
     };
-
-    document.querySelectorAll("[data-copy-caption]").forEach(function (btn) {
-      btn.onclick = function () {
-        var index = btn.getAttribute("data-copy-caption");
-        var ta = document.getElementById("caption-" + index);
-        if (ta) copyText(ta.value, "Caption copied");
-      };
-    });
   }
 
   function showLogin() {
     document.body.classList.remove("dashboard-authed");
-    if (sectionNav) sectionNav.hidden = true;
     if (loginView) loginView.hidden = false;
     if (dashboardView) dashboardView.hidden = true;
   }
@@ -422,7 +382,6 @@
     document.body.classList.add("dashboard-authed");
     if (loginView) loginView.hidden = true;
     if (dashboardView) dashboardView.hidden = false;
-    if (sectionNav) sectionNav.hidden = false;
     window.scrollTo(0, 0);
   }
 
@@ -452,9 +411,10 @@
           showLogin();
           return;
         }
-        creator = withPublicMerge(creator);
-        renderDashboard(data, creator);
-        showDashboard();
+        return withPublicMerge(creator).then(function (merged) {
+          renderDashboard(data, merged);
+          showDashboard();
+        });
       })
       .catch(function () {
         if (loginError) {
@@ -497,9 +457,10 @@
           return;
         }
         setSession(creator.id, creator.email);
-        creator = withPublicMerge(creator);
-        renderDashboard(data, creator);
-        showDashboard();
+        return withPublicMerge(creator).then(function (merged) {
+          renderDashboard(data, merged);
+          showDashboard();
+        });
       })
       .catch(function () {
         if (loginError) {
