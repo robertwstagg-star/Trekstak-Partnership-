@@ -38,6 +38,11 @@
         );
       })
       .then(function () {
+        return loadScript(
+          "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"
+        );
+      })
+      .then(function () {
         if (!firebase.apps.length) {
           firebase.initializeApp(global.TrekStakFirebaseConfig);
         }
@@ -46,7 +51,8 @@
       .then(function () {
         return {
           auth: firebase.auth(),
-          storage: firebase.storage()
+          storage: firebase.storage(),
+          firestore: firebase.firestore()
         };
       });
 

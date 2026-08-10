@@ -122,8 +122,16 @@
   }
 
   function persistCreator() {
-    if (!activeCreator || !window.CreatorPublicStore) {
-      return Promise.resolve();
+    if (!activeCreator) {
+      return Promise.reject(new Error("No creator signed in"));
+    }
+    if (!window.CreatorPublicStore || !CreatorPublicStore.savePublicFields) {
+      notifySaved("Save failed — Firebase scripts did not load. Re-upload creator-public-store.js");
+      return Promise.reject(new Error("CreatorPublicStore missing"));
+    }
+    if (!window.TrekStakFirebaseConfig) {
+      notifySaved("Save failed — firebase-config.js did not load");
+      return Promise.reject(new Error("Firebase config missing"));
     }
     renderPostsList();
     return CreatorPublicStore.savePublicFields(activeCreator)
@@ -134,7 +142,14 @@
       })
       .catch(function (err) {
         console.error(err);
-        notifySaved("Saved on this device only — cloud sync failed. Check Firebase rules.");
+        var msg = (err && err.message) || String(err);
+        if (/permission|insufficient/i.test(msg)) {
+          notifySaved("Cloud sync blocked — check Firestore rules + Anonymous Auth");
+        } else if (/auth|network|Firebase/i.test(msg)) {
+          notifySaved("Cloud sync failed — " + msg.slice(0, 80));
+        } else {
+          notifySaved("Saved on this device only — cloud sync failed");
+        }
         throw err;
       });
   }
