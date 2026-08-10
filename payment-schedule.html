@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Commission Payment Schedule — TrekStak Partners</title>
+  <meta name="description" content="When Apple pays TrekStak for App Store subscriptions, and how that maps to creator partner commission payouts." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .schedule-page {
+      padding: calc(5.5rem + env(safe-area-inset-top)) var(--pad) 4rem;
+      max-width: 48rem;
+      margin: 0 auto;
+    }
+    .schedule-page h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, 4vw, 2.35rem);
+      letter-spacing: -0.03em;
+      margin: 0 0 0.75rem;
+      line-height: 1.15;
+    }
+    .schedule-page .lede {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin: 0 0 1.75rem;
+    }
+    .schedule-note {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.25rem;
+      margin: 0 0 2rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .schedule-note strong { color: var(--ink); }
+    .schedule-note p { margin: 0 0 0.85rem; }
+    .schedule-note p:last-child { margin-bottom: 0; }
+    .schedule-table-wrap {
+      overflow-x: auto;
+      margin: 0 0 2rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+    }
+    .schedule-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      min-width: 36rem;
+    }
+    .schedule-table th,
+    .schedule-table td {
+      text-align: left;
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    .schedule-table th {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .schedule-table tr:last-child td { border-bottom: none; }
+    .schedule-table td.pay-date {
+      color: var(--orange);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .schedule-example {
+      border-left: 3px solid var(--orange);
+      padding: 0.35rem 0 0.35rem 1rem;
+      margin: 0 0 2rem;
+      color: var(--muted);
+    }
+    .schedule-example strong { color: var(--ink); }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .schedule-page h2 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      margin: 0 0 0.75rem;
+    }
+    .schedule-page ul {
+      color: var(--muted);
+      padding-left: 1.2rem;
+      margin: 0 0 2rem;
+    }
+    .schedule-page li { margin-bottom: 0.45rem; }
+    .schedule-footer {
+      color: var(--muted);
+      font-size: 0.88rem;
+      border-top: 1px solid var(--line);
+      padding-top: 1.25rem;
+    }
+    .schedule-footer a {
+      color: var(--orange);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header is-scrolled">
+    <a class="brand" href="index.html">
+      <img class="brand-logo" src="finallogo.png" width="40" height="40" alt="" />
+      <span>TrekStak <em>Partners</em></span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html#offer">The offer</a>
+      <a href="index.html#faq">FAQ</a>
+      <a class="nav-cta" href="index.html#apply">Apply</a>
+    </nav>
+  </header>
+
+  <main class="schedule-page">
+    <a class="back-link" href="index.html#faq">← Back to Partners</a>
+    <h1>Commission Payment Schedule</h1>
+    <p class="lede">Commission payments follow Apple’s App Store remittance cycle. Once Apple pays TrekStak for a period, eligible creator commissions are paid according to our terms.</p>
+
+    <div class="schedule-note">
+      <p><strong>Two Timelines</strong></p>
+      <p><strong>Initial Collaboration Payment</strong><br />Paid after you complete and get approval on your content. Not tied to Apple’s schedule.</p>
+      <p><strong>Commission</strong><br />Tracked in your dashboard as subscriptions convert. Cash payouts follow once Apple remits proceeds to TrekStak.</p>
+    </div>
+
+    <h2>2026 Remittance Dates</h2>
+    <div class="schedule-table-wrap">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>Fiscal Month</th>
+            <th>Sales Period</th>
+            <th>Apple Pays TrekStak</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>July 2026</td>
+            <td>June 28 – August 1, 2026</td>
+            <td class="pay-date">September 3, 2026</td>
+          </tr>
+          <tr>
+            <td>August 2026</td>
+            <td>August 2 – August 29, 2026</td>
+            <td class="pay-date">October 1, 2026</td>
+          </tr>
+          <tr>
+            <td>September 2026</td>
+            <td>August 30 – September 26, 2026</td>
+            <td class="pay-date">October 29, 2026</td>
+          </tr>
+          <tr>
+            <td>October 2026</td>
+            <td>September 27 – October 31, 2026</td>
+            <td class="pay-date">December 3, 2026</td>
+          </tr>
+          <tr>
+            <td>November 2026</td>
+            <td>November 1 – November 28, 2026</td>
+            <td class="pay-date">December 31, 2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="schedule-example">
+      <p style="margin:0"><strong>Example</strong><br />If referrals subscribe during Apple’s August period (August 2–29, 2026), Apple typically pays TrekStak on <strong>October 1, 2026</strong>. Eligible commission is then paid after proceeds are received.</p>
+    </div>
+
+    <h2>What to Expect</h2>
+    <ul>
+      <li>Dashboard earnings may show up before cash hits your account.</li>
+      <li>Commission payouts usually continue monthly after proceeds are received.</li>
+      <li>Refunds or cancellations may adjust pending commission before payout.</li>
+      <li>Apple’s bank posting may vary by region/holidays.</li>
+      <li>We’ll update this page with future schedule details.</li>
+    </ul>
+
+    <p class="schedule-footer">
+      <a href="https://developer.apple.com/help/app-store-connect/getting-paid/overview-of-receiving-payments" target="_blank" rel="noopener">Apple App Store Payment Information →</a><br /><br />
+      Questions: <a href="mailto:partners@trekstakapp.com">partners@trekstakapp.com</a>
+    </p>
+  </main>
+</body>
+</html>
