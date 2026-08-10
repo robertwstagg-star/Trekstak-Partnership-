@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "updatedAt": "2026-08-10",
+  "travelRewardTarget": 500,
+  "travelRewardAmount": 1000,
+  "creators": [
+    {
+      "id": "demo-chris",
+      "slug": "chris",
+      "email": "chris@demo.trekstakapp.com",
+      "displayName": "Chris",
+      "handle": "@chris.travels",
+      "role": "Planning Creator",
+      "promoCode": "CHRIS20",
+      "discountLabel": "20% off your first year",
+      "commissionRate": 0.25,
+      "commissionLabel": "25%",
+      "publicPageUrl": "https://creators.trekstakapp.com/c/chris",
+      "appStoreUrl": "https://apps.apple.com/app/trekstak/id6758947030",
+      "bio": "Trip planning tips and TrekStak walkthroughs — without clogging my Instagram feed.",
+      "avatarUrl": "",
+      "socials": {
+        "instagram": "https://www.instagram.com/",
+        "tiktok": "",
+        "youtube": ""
+      },
+      "posts": [
+        {
+          "id": "chris-001",
+          "status": "published",
+          "publishedAt": "2026-08-08",
+          "title": "How I plan a city day in under 10 minutes",
+          "body": "Open TrekStak, pick the neighborhood, stak the stops you actually care about, and you are out the door with a route — not a 40-tab browser mess.",
+          "imageUrl": "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200&q=80",
+          "imageAlt": "Traveler looking at a map outdoors",
+          "ctaLabel": "Try it with my code",
+          "showPromoCode": true,
+          "tags": ["planning", "tips"]
+        },
+        {
+          "id": "chris-002",
+          "status": "published",
+          "publishedAt": "2026-08-01",
+          "title": "Why I keep TrekStak off my main feed",
+          "body": "My Instagram stays travel and life. This page is where I drop TrekStak how-tos, codes, and updates so followers who want the app can find it without the spam.",
+          "imageUrl": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80",
+          "imageAlt": "Road trip view through a car window",
+          "ctaLabel": "Get 20% off",
+          "showPromoCode": true,
+          "tags": ["behind-the-scenes"]
+        }
+      ],
+      "stats": {
+        "codeUses": 47,
+        "qualifyingSubscribers": 32,
+        "subscriptionRevenue": 767.68,
+        "commissionEarned": 191.92,
+        "commissionPending": 47.98,
+        "travelRewardProgress": 32
+      },
+      "nextPayout": {
+        "date": "2026-04-15",
+        "label": "Apr 15, 2026",
+        "note": "After Apple remittance for March activity"
+      },
+      "dailyUses": [
+        { "date": "2026-07-12", "uses": 1 },
+        { "date": "2026-07-14", "uses": 2 },
+        { "date": "2026-07-18", "uses": 1 },
+        { "date": "2026-07-22", "uses": 3 },
+        { "date": "2026-07-25", "uses": 2 },
+        { "date": "2026-07-28", "uses": 1 },
+        { "date": "2026-08-01", "uses": 4 },
+        { "date": "2026-08-03", "uses": 2 },
+        { "date": "2026-08-05", "uses": 3 },
+        { "date": "2026-08-07", "uses": 5 },
+        { "date": "2026-08-09", "uses": 2 }
+      ],
+      "payouts": [
+        {
+          "period": "Mar 2026",
+          "qualifyingSubs": 8,
+          "commission": 47.98,
+          "status": "pending",
+          "statusLabel": "Pending (14-day hold)"
+        },
+        {
+          "period": "Feb 2026",
+          "qualifyingSubs": 12,
+          "commission": 71.97,
+          "status": "paid",
+          "statusLabel": "Paid Mar 28",
+          "paidDate": "2026-03-28"
+        },
+        {
+          "period": "Jan 2026",
+          "qualifyingSubs": 6,
+          "commission": 35.98,
+          "status": "paid",
+          "statusLabel": "Paid Feb 26",
+          "paidDate": "2026-02-26"
+        }
+      ],
+      "shareCaptions": [
+        "Planning a trip? I use TrekStak to stack neighborhoods, walks, and food stops in one place. My code CHRIS20 gets you 20% off your first year.",
+        "If you hate 40-tab trip planning like I do — TrekStak is worth a look. Code CHRIS20 for 20% off year one.",
+        "Quick planning win: pick a city, stak what you care about, walk the route. Try TrekStak with CHRIS20 (20% off first year)."
+      ],
+      "payoutMethod": {
+        "type": "E-transfer",
+        "email": "chris@demo.trekstakapp.com",
+        "note": "Update with partners@trekstakapp.com if this changes."
+      }
+    }
+  ]
+}
