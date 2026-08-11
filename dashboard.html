@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=3" />
-  <link rel="stylesheet" href="dashboard.css?v=17" />
+  <link rel="stylesheet" href="dashboard.css?v=19" />
   <link rel="stylesheet" href="webapp-shell.css?v=2" />
   <link rel="manifest" href="manifest.webmanifest" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -81,12 +81,13 @@
         </div>
       </div>
 
-      <nav class="page-section-nav" id="page-section-nav" data-app-view="page" aria-label="Page sections" hidden>
-        <button type="button" class="page-section-btn is-active" data-page-section="profile">Profile</button>
-        <button type="button" class="page-section-btn" data-page-section="radar">Radar</button>
-        <button type="button" class="page-section-btn" data-page-section="cities">Cities</button>
-        <button type="button" class="page-section-btn" data-page-section="live">Live</button>
-        <button type="button" class="page-section-btn" data-page-section="posts">Posts</button>
+      <nav class="page-section-nav" id="page-section-nav" aria-label="Page sections" hidden>
+        <span class="page-section-nav-label">Edit</span>
+        <button type="button" class="page-section-btn is-active" data-section-tab="profile">Profile</button>
+        <button type="button" class="page-section-btn" data-section-tab="radar">Radar</button>
+        <button type="button" class="page-section-btn" data-section-tab="cities">Cities</button>
+        <button type="button" class="page-section-btn" data-section-tab="live">Live</button>
+        <button type="button" class="page-section-btn" data-section-tab="posts">Posts</button>
       </nav>
 
       <section class="dash-panel page-editor-panel" data-app-view="page" data-page-section="profile" aria-labelledby="page-profile-heading">
@@ -692,7 +693,7 @@
   <script src="creator-public-store.js?v=7"></script>
   <script src="creator-image-upload.js?v=7"></script>
   <script src="dashboard-page.js?v=14"></script>
-  <script src="dashboard.js?v=11"></script>
+  <script src="dashboard.js?v=13"></script>
   <script>
     if (window.TrekStakWebApp && TrekStakWebApp.registerServiceWorker) {
       TrekStakWebApp.registerServiceWorker("sw.js");

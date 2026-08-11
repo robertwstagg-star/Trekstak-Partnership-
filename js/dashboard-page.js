@@ -59,8 +59,8 @@
       setUploadStatus(options.statusEl, "Please choose a video (MP4 or MOV).", "is-error");
       return;
     }
-    if (file.size > 100 * 1024 * 1024) {
-      setUploadStatus(options.statusEl, "Video must be under 100 MB.", "is-error");
+    if (file.size > 150 * 1024 * 1024) {
+      setUploadStatus(options.statusEl, "Video must be under 150 MB.", "is-error");
       return;
     }
 
@@ -78,7 +78,27 @@
       return;
     }
 
-    CreatorImageUpload.uploadCreatorVideo(activeCreator.slug, file, tripId, dayId)
+    var uploadPromise;
+    if (options.kind === "post") {
+      var postId = options.postId;
+      if (typeof postId === "function") postId = postId();
+      uploadPromise = CreatorImageUpload.uploadCreatorVideo(
+        activeCreator.slug,
+        file,
+        postId,
+        null,
+        "post"
+      );
+    } else {
+      uploadPromise = CreatorImageUpload.uploadCreatorVideo(
+        activeCreator.slug,
+        file,
+        tripId,
+        dayId
+      );
+    }
+
+    uploadPromise
       .then(function (downloadUrl) {
         if (options.urlInput) options.urlInput.value = downloadUrl;
         setVideoPreview(options.previewWrapId, options.previewVideoId, downloadUrl);
@@ -190,33 +210,32 @@
       return Promise.reject(new Error("No creator signed in"));
     }
     if (!window.CreatorPublicStore || !CreatorPublicStore.savePublicFields) {
-      notifySaved("Save failed — Firebase scripts did not load. Re-upload creator-public-store.js");
+      notifySaved("Save failed — creator-public-store.js did not load");
       return Promise.reject(new Error("CreatorPublicStore missing"));
-    }
-    if (!window.TrekStakFirebaseConfig) {
-      notifySaved("Save failed — firebase-config.js did not load");
-      return Promise.reject(new Error("Firebase config missing"));
     }
     renderPostsList();
     renderTripsList();
     renderCityReviewsList();
     renderLiveTripUI();
     return CreatorPublicStore.savePublicFields(activeCreator)
-      .then(function () {
+      .then(function (result) {
+        var cloudSynced = !result || result.cloudSynced !== false;
+        if (cloudSynced) {
+          notifySaved("Saved");
+        } else if (/^(127\.0\.0\.1|localhost)$/.test(location.hostname)) {
+          notifySaved(
+            "Saved locally — open /c/" + activeCreator.slug + " on this same host to preview"
+          );
+        } else {
+          notifySaved("Saved on this device — cloud sync unavailable");
+        }
         if (typeof window.onCreatorPublicUpdated === "function") {
           window.onCreatorPublicUpdated(activeCreator);
         }
       })
       .catch(function (err) {
         console.error(err);
-        var msg = (err && err.message) || String(err);
-        if (/permission|insufficient/i.test(msg)) {
-          notifySaved("Cloud sync blocked — check Firestore rules + Anonymous Auth");
-        } else if (/auth|network|Firebase/i.test(msg)) {
-          notifySaved("Cloud sync failed — " + msg.slice(0, 80));
-        } else {
-          notifySaved("Saved on this device only — cloud sync failed");
-        }
+        notifySaved("Save failed — " + ((err && err.message) || "try again"));
         throw err;
       });
   }
@@ -303,8 +322,16 @@
     if (editor) editor.hidden = true;
     setImagePreview("post-image-preview", "post-image-preview-img", "");
     setUploadStatus(document.getElementById("post-image-status"), "", "");
+    setVideoPreview("post-video-preview", "post-video-preview-vid", "");
+    setUploadStatus(document.getElementById("post-video-status"), "", "");
     var postFile = document.getElementById("post-image-file");
     if (postFile) postFile.value = "";
+    var postVideoFile = document.getElementById("post-video-file");
+    if (postVideoFile) postVideoFile.value = "";
+    var postVideo = document.getElementById("post-video");
+    if (postVideo) postVideo.value = "";
+    var postVideoLink = document.getElementById("post-video-link");
+    if (postVideoLink) postVideoLink.value = "";
   }
 
   function openPostEditor(post) {
@@ -320,6 +347,8 @@
     document.getElementById("post-body").value = post ? post.body || "" : "";
     document.getElementById("post-image").value = post ? post.imageUrl || "" : "";
     document.getElementById("post-image-alt").value = post ? post.imageAlt || "" : "";
+    document.getElementById("post-video").value = post ? post.videoUrl || "" : "";
+    document.getElementById("post-video-link").value = post ? post.videoLinkUrl || "" : "";
     document.getElementById("post-cta").value = post
       ? post.ctaLabel || "Try it with my code"
       : "Try it with my code";
@@ -331,6 +360,8 @@
 
     setImagePreview("post-image-preview", "post-image-preview-img", post ? post.imageUrl || "" : "");
     setUploadStatus(document.getElementById("post-image-status"), "", "");
+    setVideoPreview("post-video-preview", "post-video-preview-vid", post ? post.videoUrl || "" : "");
+    setUploadStatus(document.getElementById("post-video-status"), "", "");
 
     editor.hidden = false;
     editor.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -383,6 +414,8 @@
       body: body,
       imageUrl: document.getElementById("post-image").value.trim(),
       imageAlt: document.getElementById("post-image-alt").value.trim(),
+      videoUrl: document.getElementById("post-video").value.trim(),
+      videoLinkUrl: document.getElementById("post-video-link").value.trim(),
       ctaLabel: document.getElementById("post-cta").value.trim() || "Get TrekStak",
       showPromoCode: document.getElementById("post-show-code").checked,
       tags: parseTags(document.getElementById("post-tags").value)
@@ -1615,6 +1648,26 @@
           statusEl: document.getElementById("post-image-status")
         });
         postFileInput.value = "";
+      });
+    }
+
+    var postVideoFileInput = document.getElementById("post-video-file");
+    if (postVideoFileInput) {
+      postVideoFileInput.addEventListener("change", function () {
+        var postIdField = document.getElementById("post-id");
+        handleVideoFilePick({
+          fileInput: postVideoFileInput,
+          kind: "post",
+          postId:
+            (postIdField && postIdField.value) ||
+            editingPostId ||
+            (activeCreator ? generatePostId(activeCreator.slug) : "new"),
+          previewWrapId: "post-video-preview",
+          previewVideoId: "post-video-preview-vid",
+          urlInput: document.getElementById("post-video"),
+          statusEl: document.getElementById("post-video-status")
+        });
+        postVideoFileInput.value = "";
       });
     }
 

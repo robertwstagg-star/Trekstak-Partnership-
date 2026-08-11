@@ -1,5 +1,5 @@
 /* TrekStak Creator Studio — lightweight offline shell */
-var CACHE = "trekstak-studio-v1";
+var CACHE = "trekstak-studio-v2";
 var SHELL = [
   "/dashboard.html",
   "/styles.css",

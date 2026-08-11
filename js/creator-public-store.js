@@ -268,19 +268,28 @@
 
     writeOverlay(safeSlug, fields);
 
-    return ensureFirestore().then(function (fb) {
-      var payload = Object.assign({}, fields, {
-        slug: safeSlug,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      return fb.firestore
-        .collection(COLLECTION)
-        .doc(safeSlug)
-        .set(payload, { merge: true })
-        .then(function () {
-          return fields;
+    if (!global.TrekStakFirebaseConfig) {
+      return Promise.resolve({ fields: fields, cloudSynced: false });
+    }
+
+    return ensureFirestore()
+      .then(function (fb) {
+        var payload = Object.assign({}, fields, {
+          slug: safeSlug,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
-    });
+        return fb.firestore
+          .collection(COLLECTION)
+          .doc(safeSlug)
+          .set(payload, { merge: true })
+          .then(function () {
+            return { fields: fields, cloudSynced: true };
+          });
+      })
+      .catch(function (err) {
+        console.warn("Cloud save failed — kept local preview overlay", err);
+        return { fields: fields, cloudSynced: false };
+      });
   }
 
   global.CreatorPublicStore = {

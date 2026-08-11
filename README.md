@@ -20,14 +20,27 @@ Founding offer: first 10 creators · $200 starting collaboration · personal pro
 
 Edit `data/creator-accounts.json` — match `slug` / `promoCode` to `creators-site/data/creators.json`.
 
-### Local preview
+### Local preview (dashboard + public page)
+
+Use **one server** so dashboard saves appear on the public page:
+
+```bash
+./scripts/start-creator-local.sh
+```
+
+- **Dashboard:** http://127.0.0.1:8787/partners/dashboard.html — `chris@demo.trekstakapp.com`
+- **Public page:** http://127.0.0.1:8787/c/chris
+
+Separate ports (`8787` creators + `8788` partners) do **not** share preview data.
+
+### Partners dashboard only
 
 ```bash
 cd partners-site
 python3 -m http.server 8788
 ```
 
-Open `http://127.0.0.1:8788/dashboard.html` and sign in with `chris@demo.trekstakapp.com`.
+Open `http://127.0.0.1:8788/dashboard.html` (no public-page preview sync).
 
 ## Desktop upload pack
 

@@ -365,7 +365,6 @@
     if (window.DashboardPageEditor) {
       DashboardPageEditor.init(creator);
     }
-    initDashboardAppNav();
     } catch (err) {
       console.error("Dashboard render error", err);
     }
@@ -389,100 +388,8 @@
     };
   }
 
-  function initDashboardAppNav() {
-    var nav = document.getElementById("dashboard-app-nav");
-    var scope = document.getElementById("dashboard-view");
-    if (!nav || !scope || !window.TrekStakWebApp) return;
-
-    var tabs = [
-      { id: "page", label: "Page" },
-      { id: "earn", label: "Earn" },
-      { id: "tools", label: "Tools" }
-    ];
-
-    if (!nav.dataset.ready) {
-      nav.innerHTML = TrekStakWebApp.buildNavButtons(tabs);
-      nav.dataset.ready = "1";
-      TrekStakWebApp.mountBottomNav({
-        nav: nav,
-        tabs: tabs,
-        defaultTab: "page",
-        scope: scope,
-        onChange: handleDashboardTabChange
-      });
-    }
-
-    initPageSectionNav(scope);
-    handleDashboardTabChange(parseDashboardTab());
-    initStandaloneHint();
-  }
-
-  function parseDashboardTab() {
-    var hash = (location.hash || "").replace(/^#/, "").trim().toLowerCase();
-    if (hash === "share") return "tools";
-    if (hash === "page" || hash === "earn" || hash === "tools") return hash;
-    return "page";
-  }
-
-  function handleDashboardTabChange(tabId) {
-    if (tabId === "share") tabId = "tools";
-    var sectionNav = document.getElementById("page-section-nav");
-    if (sectionNav) {
-      sectionNav.hidden = tabId !== "page";
-    }
-    if (tabId === "page") {
-      setPageSection(window._activePageSection || "profile");
-    }
-  }
-
-  function setPageSection(sectionId) {
-    var scope = document.getElementById("dashboard-view");
-    if (!scope) return;
-    window._activePageSection = sectionId;
-
-    scope.querySelectorAll(".dash-panel[data-page-section]").forEach(function (el) {
-      el.hidden = el.getAttribute("data-page-section") !== sectionId;
-    });
-
-    var sectionNav = document.getElementById("page-section-nav");
-    if (sectionNav) {
-      sectionNav.querySelectorAll(".page-section-btn").forEach(function (btn) {
-        btn.classList.toggle(
-          "is-active",
-          btn.getAttribute("data-section-tab") === sectionId
-        );
-      });
-    }
-  }
-
-  function initPageSectionNav(scope) {
-    var sectionNav = document.getElementById("page-section-nav");
-    if (!sectionNav || sectionNav.dataset.ready) return;
-    sectionNav.dataset.ready = "1";
-
-    sectionNav.querySelectorAll(".page-section-btn").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        setPageSection(btn.getAttribute("data-section-tab"));
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-    });
-
-    setPageSection(window._activePageSection || "profile");
-  }
-
-  function initStandaloneHint() {
-    var link = document.getElementById("link-open-browser");
-    if (!link) return;
-    var standalone =
-      window.matchMedia("(display-mode: standalone)").matches ||
-      window.navigator.standalone === true;
-    link.hidden = !standalone;
-  }
-
   function showLogin() {
-    document.body.classList.remove("dashboard-authed", "webapp-has-nav");
-    var nav = document.getElementById("dashboard-app-nav");
-    if (nav) nav.hidden = true;
+    document.body.classList.remove("dashboard-authed");
     if (loginView) loginView.hidden = false;
     if (dashboardView) dashboardView.hidden = true;
   }
@@ -491,7 +398,6 @@
     document.body.classList.add("dashboard-authed");
     if (loginView) loginView.hidden = true;
     if (dashboardView) dashboardView.hidden = false;
-    initDashboardAppNav();
     window.scrollTo(0, 0);
   }
 

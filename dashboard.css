@@ -1024,17 +1024,27 @@ body.dashboard-authed .dashboard-shell {
 }
 
 .page-section-nav {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 0.35rem;
+  display: grid;
+  grid-template-columns: auto repeat(5, minmax(0, 1fr));
+  gap: 0.3rem;
+  align-items: center;
   margin: 0 0 1rem;
-  padding: 0.25rem;
+  padding: 0.35rem;
   border-radius: 12px;
   background: rgba(0, 0, 0, 0.22);
   border: 1px solid var(--line);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  width: 100%;
+  min-width: 0;
+}
+
+.page-section-nav-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 0.25rem 0 0.35rem;
+  white-space: nowrap;
 }
 
 .page-section-nav::-webkit-scrollbar {
@@ -1042,18 +1052,19 @@ body.dashboard-authed .dashboard-shell {
 }
 
 .page-section-btn {
-  flex: 0 0 auto;
   margin: 0;
-  padding: 0.5rem 0.85rem;
+  padding: 0.5rem 0.35rem;
   border: none;
   border-radius: 8px;
   background: transparent;
   color: var(--muted);
   font-family: var(--font-body);
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
+  text-align: center;
+  min-width: 0;
 }
 
 .page-section-btn:hover {
@@ -1063,6 +1074,16 @@ body.dashboard-authed .dashboard-shell {
 .page-section-btn.is-active {
   background: rgba(255, 255, 255, 0.1);
   color: var(--ink);
+}
+
+@media (max-width: 520px) {
+  .page-section-nav {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .page-section-nav-label {
+    display: none;
+  }
 }
 
 @media (min-width: 900px) {
