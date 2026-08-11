@@ -10,7 +10,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=3" />
-  <link rel="stylesheet" href="dashboard.css?v=9" />
+  <link rel="stylesheet" href="dashboard.css?v=16" />
+  <link rel="stylesheet" href="webapp-shell.css?v=1" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0b1424" />
 </head>
 <body class="dashboard-body">
   <header class="site-header site-header--partner-tools is-scrolled">
@@ -52,7 +57,7 @@
 
     <!-- Dashboard -->
     <div id="dashboard-view" hidden>
-      <div class="dashboard-header-bar">
+      <div class="dashboard-header-bar" data-app-view="all">
         <div class="dashboard-greeting">
           <h1 id="dash-greeting-name">Creator</h1>
           <p id="dash-role">Role · @handle</p>
@@ -63,7 +68,7 @@
         </div>
       </div>
 
-      <div id="overview" class="code-hero">
+      <div id="overview" class="code-hero" data-app-view="all">
         <div>
           <span class="code-hero-label">Your promo code</span>
           <div class="code-hero-value" id="code-hero-value">CODE</div>
@@ -75,7 +80,7 @@
         </div>
       </div>
 
-      <section class="dash-panel page-editor-panel" aria-labelledby="page-profile-heading">
+      <section class="dash-panel page-editor-panel" data-app-view="page" aria-labelledby="page-profile-heading">
         <div class="dash-panel-head dash-panel-head--section">
           <h2 id="page-profile-heading">Profile</h2>
           <a id="link-public-page-inline" href="#" target="_blank" rel="noopener">View live page</a>
@@ -125,7 +130,322 @@
         </form>
       </section>
 
-      <section class="dash-panel page-editor-panel" aria-labelledby="page-posts-heading">
+      <section class="dash-panel page-editor-panel" data-app-view="page" aria-labelledby="trip-radar-heading">
+        <div class="dash-panel-head dash-panel-head--section">
+          <h2 id="trip-radar-heading">Trip radar</h2>
+          <button type="button" class="btn btn-primary btn-sm" id="btn-new-trip">Add trip</button>
+        </div>
+        <p class="panel-note">Where you&rsquo;re headed next — city, timing, and why. Prefer a TrekStak city so followers can open it in the app.</p>
+
+        <div id="trip-editor" class="post-editor" hidden>
+          <h3 id="trip-editor-title">New trip</h3>
+          <form id="trip-form" class="page-form" novalidate>
+            <input type="hidden" id="trip-id" value="" />
+            <div class="form-grid">
+              <label class="field">
+                <span>City</span>
+                <input type="text" id="trip-city" list="trekstak-city-list" required maxlength="80" placeholder="Start typing a TrekStak city…" autocomplete="off" />
+                <datalist id="trekstak-city-list"></datalist>
+                <span class="field-hint">Use a city in TrekStak so followers can open it in the app.</span>
+                <span class="field-hint field-hint--warn" id="trip-city-hint" hidden></span>
+              </label>
+              <label class="field">
+                <span>When</span>
+                <input type="text" id="trip-when" required maxlength="60" placeholder="Sep 2026 · Fall · Next month" />
+              </label>
+              <label class="field">
+                <span>Status</span>
+                <select id="trip-status">
+                  <option value="upcoming">Upcoming</option>
+                  <option value="currently">There now</option>
+                  <option value="just-back">Just back</option>
+                </select>
+              </label>
+              <label class="field field-full">
+                <span>Why / what you&rsquo;re into</span>
+                <textarea id="trip-why" rows="3" placeholder="Food + walks, testing TrekStak neighborhoods…"></textarea>
+                <span class="field-hint">Write as much or as little as you want — a line or a short paragraph.</span>
+              </label>
+              <fieldset class="field field-full chip-fieldset">
+                <legend>Using TrekStak for <em>(optional)</em></legend>
+                <div class="chip-options">
+                  <label class="chip-option"><input type="checkbox" name="trip-focus" value="walks" /> Walks</label>
+                  <label class="chip-option"><input type="checkbox" name="trip-focus" value="food" /> Food</label>
+                  <label class="chip-option"><input type="checkbox" name="trip-focus" value="family" /> Family</label>
+                  <label class="chip-option"><input type="checkbox" name="trip-focus" value="nightlife" /> Nightlife</label>
+                  <label class="chip-option"><input type="checkbox" name="trip-focus" value="planning" /> Planning</label>
+                </div>
+              </fieldset>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-sm">Save trip</button>
+              <button type="button" class="btn btn-outline btn-sm" id="btn-cancel-trip">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="trips-list" class="posts-admin-list" aria-live="polite"></div>
+      </section>
+
+      <section class="dash-panel page-editor-panel" data-app-view="page" aria-labelledby="city-week-heading">
+        <div class="dash-panel-head dash-panel-head--section">
+          <h2 id="city-week-heading">City of the week</h2>
+        </div>
+        <p class="panel-note">One rotating insight — city, photo, and tip bullets. Separate from Posts (those stay free-writing).</p>
+
+        <form id="city-week-form" class="page-form" novalidate>
+          <div class="form-grid">
+            <label class="field">
+              <span>City</span>
+              <input type="text" id="cotw-city" list="trekstak-city-list" required maxlength="80" placeholder="Start typing a TrekStak city…" autocomplete="off" />
+              <span class="field-hint">Prefer a TrekStak city so the flag and name match the app.</span>
+              <span class="field-hint field-hint--warn" id="cotw-city-hint" hidden></span>
+            </label>
+            <label class="field field-full">
+              <span>Cover photo</span>
+              <div class="image-upload-field">
+                <div class="image-upload-preview" id="cotw-photo-preview" hidden>
+                  <img id="cotw-photo-preview-img" alt="" />
+                </div>
+                <label class="btn btn-outline btn-sm image-upload-btn">
+                  Choose photo
+                  <input type="file" id="cotw-photo-file" accept="image/*" hidden />
+                </label>
+                <p class="upload-hint">From your phone camera or photo library. JPEG recommended.</p>
+                <label class="field field-full upload-url-fallback">
+                  <span>Or paste image URL</span>
+                  <input type="url" id="cotw-photo" placeholder="https://…" autocomplete="off" />
+                </label>
+                <p class="upload-status" id="cotw-photo-status" aria-live="polite"></p>
+              </div>
+            </label>
+            <label class="field field-full">
+              <span>Intro</span>
+              <textarea id="cotw-intro" rows="3" maxlength="400" placeholder="Why this city this week — a line or two."></textarea>
+            </label>
+          </div>
+
+          <div class="cotw-tips-block">
+            <h3 class="cotw-tips-title">Tips</h3>
+            <p class="field-hint">Up to five tips. These show as bullets on your public page — keep each one punchy.</p>
+            <div class="form-grid cotw-tips-grid">
+              <label class="field field-full">
+                <span>Tip 1</span>
+                <input type="text" id="cotw-tip-1" maxlength="160" placeholder="First tip" />
+              </label>
+              <label class="field field-full">
+                <span>Tip 2</span>
+                <input type="text" id="cotw-tip-2" maxlength="160" placeholder="Second tip" />
+              </label>
+              <label class="field field-full">
+                <span>Tip 3</span>
+                <input type="text" id="cotw-tip-3" maxlength="160" placeholder="Third tip" />
+              </label>
+              <label class="field field-full">
+                <span>Tip 4</span>
+                <input type="text" id="cotw-tip-4" maxlength="160" placeholder="Fourth tip" />
+              </label>
+              <label class="field field-full">
+                <span>Tip 5</span>
+                <input type="text" id="cotw-tip-5" maxlength="160" placeholder="Fifth tip" />
+              </label>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-sm">Save city of the week</button>
+            <button type="button" class="btn btn-outline btn-sm" id="btn-clear-cotw">Clear pick</button>
+            <span id="cotw-save-note" class="inline-note" aria-live="polite"></span>
+          </div>
+        </form>
+      </section>
+
+      <section class="dash-panel page-editor-panel" data-app-view="page" aria-labelledby="city-reviews-heading">
+        <div class="dash-panel-head dash-panel-head--section">
+          <h2 id="city-reviews-heading">City ratings</h2>
+          <button type="button" class="btn btn-primary btn-sm" id="btn-new-city-review">Add review</button>
+        </div>
+        <p class="panel-note">Rate a city on up to five categories (1–5 stars) with a short why — from your trips or research.</p>
+
+        <div id="city-review-editor" class="post-editor" hidden>
+          <h3 id="city-review-editor-title">New city review</h3>
+          <form id="city-review-form" class="page-form" novalidate>
+            <input type="hidden" id="city-review-id" value="" />
+            <div class="form-grid">
+              <label class="field field-full">
+                <span>City</span>
+                <input type="text" id="city-review-city" list="trekstak-city-list" required maxlength="80" placeholder="Start typing a city…" autocomplete="off" />
+                <span class="field-hint field-hint--warn" id="city-review-city-hint" hidden></span>
+              </label>
+            </div>
+            <div class="city-review-ratings-block">
+              <h3 class="city-review-ratings-title">Category ratings</h3>
+              <p class="field-hint">Pick up to five categories. Each row: stars + why it earned that score.</p>
+              <div id="city-review-rating-rows" class="city-review-rating-rows"></div>
+              <button type="button" class="btn btn-outline btn-sm" id="btn-add-rating-row">Add category</button>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-sm">Save review</button>
+              <button type="button" class="btn btn-outline btn-sm" id="btn-cancel-city-review">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="city-reviews-list" class="posts-admin-list" aria-live="polite"></div>
+      </section>
+
+      <section class="dash-panel page-editor-panel" data-app-view="page" aria-labelledby="live-trip-heading">
+        <div class="dash-panel-head dash-panel-head--section">
+          <h2 id="live-trip-heading">Live trip</h2>
+          <button type="button" class="btn btn-primary btn-sm" id="btn-add-live-trip-day" hidden>Add today&rsquo;s update</button>
+        </div>
+        <p class="panel-note">One follow-along trip at a time — day-by-day updates with photos and uploaded video (optional link to TikTok or YouTube).</p>
+
+        <div id="live-trip-status-bar" class="live-trip-status-bar" hidden>
+          <span class="status-pill" id="live-trip-status-pill">Planning</span>
+          <div class="live-trip-status-actions">
+            <button type="button" class="btn btn-primary btn-sm" id="btn-live-trip-go-live">Go live</button>
+            <button type="button" class="btn btn-outline btn-sm" id="btn-live-trip-end">End trip</button>
+          </div>
+        </div>
+
+        <form id="live-trip-shell-form" class="page-form" novalidate>
+          <input type="hidden" id="live-trip-id" value="" />
+          <div class="form-grid">
+            <label class="field field-full">
+              <span>Trip title</span>
+              <input type="text" id="live-trip-title" required maxlength="100" placeholder="Lisbon long weekend" />
+            </label>
+            <label class="field">
+              <span>City</span>
+              <input type="text" id="live-trip-city" list="trekstak-city-list" required maxlength="80" placeholder="Start typing a city…" autocomplete="off" />
+              <span class="field-hint field-hint--warn" id="live-trip-city-hint" hidden></span>
+            </label>
+            <label class="field">
+              <span>Start date</span>
+              <input type="date" id="live-trip-start" />
+            </label>
+            <label class="field">
+              <span>End date</span>
+              <input type="date" id="live-trip-end-date" />
+            </label>
+            <label class="field field-full">
+              <span>Hook</span>
+              <input type="text" id="live-trip-hook" maxlength="160" placeholder="Why follow along — one line." />
+            </label>
+            <label class="field field-full">
+              <span>Cover photo</span>
+              <div class="image-upload-field">
+                <div class="image-upload-preview" id="live-trip-cover-preview" hidden>
+                  <img id="live-trip-cover-preview-img" alt="" />
+                </div>
+                <label class="btn btn-outline btn-sm image-upload-btn">
+                  Choose photo
+                  <input type="file" id="live-trip-cover-file" accept="image/*" hidden />
+                </label>
+                <label class="field field-full upload-url-fallback">
+                  <span>Or paste image URL</span>
+                  <input type="url" id="live-trip-cover" placeholder="https://…" autocomplete="off" />
+                </label>
+                <p class="upload-status" id="live-trip-cover-status" aria-live="polite"></p>
+              </div>
+            </label>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-sm">Save trip</button>
+            <button type="button" class="btn btn-outline btn-sm" id="btn-clear-live-trip">Clear trip</button>
+            <span id="live-trip-save-note" class="inline-note" aria-live="polite"></span>
+          </div>
+        </form>
+
+        <div id="live-trip-days-panel" hidden>
+          <h3 class="live-trip-days-title">Days on the trip</h3>
+          <div id="live-trip-days-list" class="posts-admin-list" aria-live="polite"></div>
+        </div>
+
+        <div id="live-trip-day-editor" class="post-editor" hidden>
+          <h3 id="live-trip-day-editor-title">Today&rsquo;s update</h3>
+          <form id="live-trip-day-form" class="page-form" novalidate>
+            <input type="hidden" id="live-trip-day-id" value="" />
+            <input type="hidden" id="live-trip-day-number" value="" />
+            <div class="form-grid">
+              <label class="field">
+                <span>Day label</span>
+                <input type="text" id="live-trip-day-label" maxlength="40" placeholder="Day 1 · Arrival" />
+              </label>
+              <label class="field field-full">
+                <span>Headline</span>
+                <input type="text" id="live-trip-day-headline" required maxlength="120" placeholder="Alfama on foot" />
+              </label>
+              <label class="field field-full">
+                <span>Summary</span>
+                <textarea id="live-trip-day-summary" rows="3" maxlength="500" placeholder="What happened today — a few sentences."></textarea>
+              </label>
+              <fieldset class="field field-full chip-fieldset">
+                <legend>Tags <em>(up to 3)</em></legend>
+                <div class="chip-options" id="live-trip-day-tags">
+                  <label class="chip-option"><input type="checkbox" name="live-trip-tag" value="food" /> Food</label>
+                  <label class="chip-option"><input type="checkbox" name="live-trip-tag" value="culture" /> Culture</label>
+                  <label class="chip-option"><input type="checkbox" name="live-trip-tag" value="nightlife" /> Nightlife</label>
+                  <label class="chip-option"><input type="checkbox" name="live-trip-tag" value="outdoors" /> Outdoors</label>
+                  <label class="chip-option"><input type="checkbox" name="live-trip-tag" value="shopping" /> Shopping</label>
+                  <label class="chip-option"><input type="checkbox" name="live-trip-tag" value="vibe" /> Vibe</label>
+                  <label class="chip-option"><input type="checkbox" name="live-trip-tag" value="family" /> Family</label>
+                  <label class="chip-option"><input type="checkbox" name="live-trip-tag" value="beach" /> Beach</label>
+                  <label class="chip-option"><input type="checkbox" name="live-trip-tag" value="travel" /> Getting there</label>
+                  <label class="chip-option"><input type="checkbox" name="live-trip-tag" value="stay" /> Where we stayed</label>
+                  <label class="chip-option"><input type="checkbox" name="live-trip-tag" value="walk" /> Walk day</label>
+                </div>
+              </fieldset>
+              <label class="field field-full">
+                <span>Photo</span>
+                <div class="image-upload-field">
+                  <div class="image-upload-preview" id="live-trip-day-photo-preview" hidden>
+                    <img id="live-trip-day-photo-preview-img" alt="" />
+                  </div>
+                  <label class="btn btn-outline btn-sm image-upload-btn">
+                    Choose photo
+                    <input type="file" id="live-trip-day-photo-file" accept="image/*" hidden />
+                  </label>
+                  <label class="field field-full upload-url-fallback">
+                    <span>Or paste image URL</span>
+                    <input type="url" id="live-trip-day-photo" placeholder="https://…" autocomplete="off" />
+                  </label>
+                  <p class="upload-status" id="live-trip-day-photo-status" aria-live="polite"></p>
+                </div>
+              </label>
+              <label class="field field-full">
+                <span>Video clip</span>
+                <div class="image-upload-field">
+                  <div class="video-upload-preview" id="live-trip-day-video-preview" hidden>
+                    <video id="live-trip-day-video-preview-vid" controls playsinline preload="metadata"></video>
+                  </div>
+                  <label class="btn btn-outline btn-sm image-upload-btn">
+                    Upload video
+                    <input type="file" id="live-trip-day-video-file" accept="video/*" hidden />
+                  </label>
+                  <p class="upload-hint">MP4 or MOV, up to 150 MB. Best for short clips — about 2–8 minutes at 1080p from a phone. For longer videos, paste a link below.</p>
+                  <label class="field field-full upload-url-fallback">
+                    <span>Or paste video URL</span>
+                    <input type="url" id="live-trip-day-video" placeholder="https://…" autocomplete="off" />
+                  </label>
+                  <p class="upload-status" id="live-trip-day-video-status" aria-live="polite"></p>
+                </div>
+              </label>
+              <label class="field field-full">
+                <span>Also posted at <em>(optional)</em></span>
+                <input type="url" id="live-trip-day-video-link" placeholder="TikTok, YouTube, or Instagram link" autocomplete="off" />
+              </label>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-sm">Save day</button>
+              <button type="button" class="btn btn-outline btn-sm" id="btn-cancel-live-trip-day">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="dash-panel page-editor-panel" data-app-view="page" aria-labelledby="page-posts-heading">
         <div class="dash-panel-head dash-panel-head--section">
           <h2 id="page-posts-heading">Posts</h2>
           <button type="button" class="btn btn-primary btn-sm" id="btn-new-post">New post</button>
@@ -167,6 +487,28 @@
                 <span>Photo description <em>(accessibility)</em></span>
                 <input type="text" id="post-image-alt" placeholder="What the photo shows" maxlength="120" />
               </label>
+              <label class="field field-full">
+                <span>Video clip <em>(optional)</em></span>
+                <div class="image-upload-field">
+                  <div class="video-upload-preview" id="post-video-preview" hidden>
+                    <video id="post-video-preview-vid" controls playsinline preload="metadata"></video>
+                  </div>
+                  <label class="btn btn-outline btn-sm image-upload-btn">
+                    Upload video
+                    <input type="file" id="post-video-file" accept="video/*" hidden />
+                  </label>
+                  <p class="upload-hint">MP4 or MOV, up to 150 MB. Best for short clips — about 2–8 minutes at 1080p from a phone. For longer videos, paste a link below.</p>
+                  <label class="field field-full upload-url-fallback">
+                    <span>Or paste video URL</span>
+                    <input type="url" id="post-video" placeholder="https://…" autocomplete="off" />
+                  </label>
+                  <p class="upload-status" id="post-video-status" aria-live="polite"></p>
+                </div>
+              </label>
+              <label class="field field-full">
+                <span>Also posted at <em>(optional)</em></span>
+                <input type="url" id="post-video-link" placeholder="TikTok, YouTube, or Instagram link" autocomplete="off" />
+              </label>
               <label class="field">
                 <span>Button label</span>
                 <input type="text" id="post-cta" placeholder="Try it with my code" maxlength="40" />
@@ -197,7 +539,7 @@
         <div id="posts-list" class="posts-admin-list" aria-live="polite"></div>
       </section>
 
-      <section class="dash-panel" aria-labelledby="share-heading">
+      <section class="dash-panel" data-app-view="share" aria-labelledby="share-heading" hidden>
         <div class="dash-panel-head dash-panel-head--section">
           <h2 id="share-heading">Tool Kit</h2>
         </div>
@@ -238,7 +580,7 @@
         </div>
       </section>
 
-      <div class="dash-finance" id="earnings">
+      <div class="dash-finance" id="earnings" data-app-view="earn" hidden>
         <div class="dash-panel-head dash-panel-head--section dash-finance-head">
           <h2 id="earnings-heading">Earnings</h2>
           <span>Commission rate: <strong id="commission-rate">25%</strong></span>
@@ -332,12 +674,20 @@
     </nav>
   </footer>
 
+  <nav class="webapp-nav" id="dashboard-app-nav" aria-label="Dashboard sections" hidden></nav>
+
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="firebase-config.js?v=3"></script>
   <script src="smooth-scroll.js?v=2"></script>
-  <script src="creator-public-store.js?v=3"></script>
-  <script src="creator-image-upload.js?v=3"></script>
-  <script src="dashboard-page.js?v=4"></script>
-  <script src="dashboard.js?v=8"></script>
+  <script src="webapp-shell.js?v=1"></script>
+  <script src="creator-public-store.js?v=7"></script>
+  <script src="creator-image-upload.js?v=7"></script>
+  <script src="dashboard-page.js?v=14"></script>
+  <script src="dashboard.js?v=10"></script>
+  <script>
+    if (window.TrekStakWebApp && TrekStakWebApp.registerServiceWorker) {
+      TrekStakWebApp.registerServiceWorker("sw.js");
+    }
+  </script>
 </body>
 </html>

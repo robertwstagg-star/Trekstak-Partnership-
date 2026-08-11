@@ -1,0 +1,152 @@
+/* TrekStak web app shell — shared with partners dashboard */
+
+:root {
+  --webapp-nav-h: 3.35rem;
+  --webapp-tab-active: #ffc48a;
+}
+
+.webapp-has-nav .main,
+.webapp-has-nav .dashboard-shell {
+  padding-bottom: calc(var(--webapp-nav-h) + env(safe-area-inset-bottom) + 1.25rem);
+}
+
+.webapp-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.webapp-tabs {
+  display: flex;
+  gap: 0.35rem;
+  margin: 0.85rem 0 0.75rem;
+  padding: 0.2rem;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid var(--line);
+}
+
+.webapp-tab {
+  flex: 1;
+  margin: 0;
+  padding: 0.55rem 0.35rem;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  position: relative;
+}
+
+.webapp-tab:hover {
+  color: var(--ink);
+}
+
+.webapp-tab.is-active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.webapp-tab-badge {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.4rem;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--orange-hot, #ff8f3d);
+}
+
+.webapp-panels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.webapp-panel[hidden] {
+  display: none !important;
+}
+
+.webapp-panel-empty {
+  margin: 0;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.92rem;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+}
+
+/* Fixed bottom nav (dashboard) */
+.webapp-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 200;
+  display: flex;
+  align-items: stretch;
+  min-height: var(--webapp-nav-h);
+  padding-bottom: env(safe-area-inset-bottom);
+  background: rgba(11, 20, 36, 0.94);
+  border-top: 1px solid var(--line);
+  backdrop-filter: blur(14px);
+}
+
+.webapp-nav[hidden] {
+  display: none !important;
+}
+
+.webapp-nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  margin: 0;
+  padding: 0.45rem 0.25rem 0.35rem;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.webapp-nav-btn:hover {
+  color: var(--ink);
+}
+
+.webapp-nav-btn.is-active {
+  color: var(--webapp-tab-active);
+}
+
+.webapp-nav-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+.webapp-nav-btn.is-active .webapp-nav-icon {
+  opacity: 1;
+}
+
+@media (min-width: 768px) {
+  .webapp-nav {
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 28rem;
+    border-radius: 14px 14px 0 0;
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+}

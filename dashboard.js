@@ -120,6 +120,19 @@
 
   window.showDashboardToast = showToast;
 
+  function resolvePublicPageUrl(creator) {
+    if (!creator || !creator.slug) {
+      return (creator && creator.publicPageUrl) || "";
+    }
+    var host = location.hostname;
+    if (host === "127.0.0.1" || host === "localhost") {
+      return location.origin + "/c/" + encodeURIComponent(creator.slug);
+    }
+    return (
+      creator.publicPageUrl || "https://creators.trekstakapp.com/c/" + encodeURIComponent(creator.slug)
+    );
+  }
+
   function withPublicMerge(creator) {
     if (!creator || !window.CreatorPublicStore) {
       return Promise.resolve(creator);
@@ -324,19 +337,20 @@
 
     var publicLink = document.getElementById("link-public-page");
     var publicPageUrl = document.getElementById("public-page-url");
-    var publicDisplay = creator.publicPageUrl.replace(/^https:\/\//, "");
+    var pageUrl = resolvePublicPageUrl(creator);
+    var publicDisplay = pageUrl.replace(/^https?:\/\//, "");
     if (publicLink) {
-      publicLink.href = creator.publicPageUrl;
+      publicLink.href = pageUrl;
       publicLink.textContent = "View public page";
-      publicLink.title = creator.publicPageUrl;
+      publicLink.title = pageUrl;
     }
     if (publicPageUrl) publicPageUrl.textContent = publicDisplay;
 
     document.getElementById("link-app-store").href = creator.appStoreUrl;
 
     var qrImg = document.getElementById("qr-image");
-    qrImg.src = qrUrl(creator.publicPageUrl);
-    qrImg.alt = "QR code for " + creator.publicPageUrl;
+    qrImg.src = qrUrl(pageUrl);
+    qrImg.alt = "QR code for " + pageUrl;
 
     var payout = creator.payoutMethod || {};
     document.getElementById("payout-type").textContent = payout.type || "—";
@@ -351,14 +365,17 @@
     if (window.DashboardPageEditor) {
       DashboardPageEditor.init(creator);
     }
+    initDashboardAppNav();
     } catch (err) {
       console.error("Dashboard render error", err);
     }
   }
 
   function bindDashboardActions(creator) {
+    var pageUrl = resolvePublicPageUrl(creator);
+
     function bindCopyPage() {
-      copyText(creator.publicPageUrl, "Public page link copied");
+      copyText(pageUrl, "Public page link copied");
     }
 
     document.getElementById("btn-copy-code").onclick = function () {
@@ -372,8 +389,33 @@
     };
   }
 
+  function initDashboardAppNav() {
+    var nav = document.getElementById("dashboard-app-nav");
+    var scope = document.getElementById("dashboard-view");
+    if (!nav || !scope || !window.TrekStakWebApp) return;
+
+    var tabs = [
+      { id: "page", label: "Page" },
+      { id: "earn", label: "Earn" },
+      { id: "share", label: "Share" }
+    ];
+
+    if (!nav.dataset.ready) {
+      nav.innerHTML = TrekStakWebApp.buildNavButtons(tabs);
+      nav.dataset.ready = "1";
+      TrekStakWebApp.mountBottomNav({
+        nav: nav,
+        tabs: tabs,
+        defaultTab: "page",
+        scope: scope
+      });
+    }
+  }
+
   function showLogin() {
-    document.body.classList.remove("dashboard-authed");
+    document.body.classList.remove("dashboard-authed", "webapp-has-nav");
+    var nav = document.getElementById("dashboard-app-nav");
+    if (nav) nav.hidden = true;
     if (loginView) loginView.hidden = false;
     if (dashboardView) dashboardView.hidden = true;
   }
@@ -382,6 +424,7 @@
     document.body.classList.add("dashboard-authed");
     if (loginView) loginView.hidden = true;
     if (dashboardView) dashboardView.hidden = false;
+    initDashboardAppNav();
     window.scrollTo(0, 0);
   }
 

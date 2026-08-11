@@ -665,9 +665,23 @@ body.dashboard-authed .dashboard-shell {
 }
 
 .post-admin-head strong {
-  display: block;
+  display: inline;
   font-size: 0.95rem;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0;
+  margin-right: 0.35rem;
+}
+
+.trip-flag {
+  margin-right: 0.2rem;
+  font-style: normal;
+}
+
+.trip-country {
+  display: inline-block;
+  margin-right: 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
 }
 
 .post-admin-actions {
@@ -689,9 +703,235 @@ body.dashboard-authed .dashboard-shell {
   line-height: 1.45;
 }
 
+.page-form .field-hint--warn {
+  color: #ffc48a;
+}
+
+.page-form .field-hint--warn[hidden] {
+  display: none !important;
+}
+
+.chip-fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.chip-fieldset legend {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 0.45rem;
+}
+
+.chip-fieldset legend em {
+  font-style: normal;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.chip-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.chip-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chip-option input {
+  accent-color: var(--orange);
+}
+
 .status-pill.draft {
   background: rgba(140, 160, 200, 0.15);
   color: #b8c8e8;
+}
+
+.status-pill.currently {
+  background: rgba(80, 200, 120, 0.18);
+  color: #7ee0a8;
+}
+
+.status-pill.upcoming {
+  background: rgba(254, 130, 0, 0.16);
+  color: #ffc48a;
+}
+
+.status-pill.just-back {
+  background: rgba(140, 160, 200, 0.15);
+  color: #b8c8e8;
+}
+
+.status-pill.planning {
+  background: rgba(140, 160, 200, 0.15);
+  color: #b8c8e8;
+}
+
+.status-pill.live {
+  background: rgba(80, 200, 120, 0.18);
+  color: #7ee0a8;
+}
+
+.status-pill.wrapped {
+  background: rgba(254, 130, 0, 0.12);
+  color: #ffc48a;
+}
+
+.live-trip-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.live-trip-status-actions {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.live-trip-days-title {
+  margin: 1.25rem 0 0.65rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.video-upload-preview video {
+  width: 100%;
+  max-height: 240px;
+  border-radius: 10px;
+  background: #000;
+}
+
+#live-trip-cover-preview img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  width: 100%;
+  max-height: 220px;
+}
+
+.cotw-tips-block {
+  margin-top: 1.1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.cotw-tips-title {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.cotw-tips-grid {
+  margin-top: 0.65rem;
+}
+
+#cotw-photo-preview img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  width: 100%;
+  max-height: 220px;
+}
+
+.city-review-ratings-block {
+  margin-top: 1.1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.city-review-ratings-title {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.city-review-rating-rows {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0.75rem 0 0.85rem;
+}
+
+.city-review-rating-row {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.city-review-rating-row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.city-review-rating-row-head select {
+  flex: 1;
+  min-width: 10rem;
+}
+
+.city-review-custom-label[hidden] {
+  display: none !important;
+}
+
+.star-picker {
+  display: inline-flex;
+  gap: 0.15rem;
+  align-items: center;
+}
+
+.city-review-admin-list {
+  margin: 0.35rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.city-review-admin-list li {
+  margin-bottom: 0.25rem;
+}
+
+.star-picker-btn {
+  border: none;
+  background: none;
+  padding: 0.1rem 0.15rem;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.star-picker-btn.is-active,
+.star-picker-btn:hover {
+  color: #ffc48a;
+}
+
+.star-picker-btn:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.city-review-admin-stars {
+  color: #ffc48a;
+  letter-spacing: 0.05em;
+  font-size: 0.9rem;
 }
 
 #profile-avatar-preview img {

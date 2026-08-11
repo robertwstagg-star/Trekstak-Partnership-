@@ -1,0 +1,582 @@
+{
+  "version": 3,
+  "source": "CityManager.travelSearchVisibleCityNames + City.flagForCountry",
+  "count": 115,
+  "cities": [
+    {
+      "name": "Algarve",
+      "country": "Portugal",
+      "flag": "🇵🇹"
+    },
+    {
+      "name": "Amsterdam",
+      "country": "Netherlands",
+      "flag": "🇳🇱"
+    },
+    {
+      "name": "Antigua Guatemala",
+      "country": "Guatemala",
+      "flag": "🇬🇹"
+    },
+    {
+      "name": "Athens",
+      "country": "Greece",
+      "flag": "🇬🇷"
+    },
+    {
+      "name": "Auckland",
+      "country": "New Zealand",
+      "flag": "🇳🇿"
+    },
+    {
+      "name": "Austin",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "Bali (Denpasar)",
+      "country": "Indonesia",
+      "flag": "🇮🇩"
+    },
+    {
+      "name": "Banff",
+      "country": "Canada",
+      "flag": "🇨🇦"
+    },
+    {
+      "name": "Bangkok",
+      "country": "Thailand",
+      "flag": "🇹🇭"
+    },
+    {
+      "name": "Barcelona",
+      "country": "Spain",
+      "flag": "🇪🇸"
+    },
+    {
+      "name": "Beijing",
+      "country": "China",
+      "flag": "🇨🇳"
+    },
+    {
+      "name": "Belgrade",
+      "country": "Serbia",
+      "flag": "🇷🇸"
+    },
+    {
+      "name": "Berlin",
+      "country": "Germany",
+      "flag": "🇩🇪"
+    },
+    {
+      "name": "Bogotá",
+      "country": "Colombia",
+      "flag": "🇨🇴"
+    },
+    {
+      "name": "Boston",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "Brisbane",
+      "country": "Australia",
+      "flag": "🇦🇺"
+    },
+    {
+      "name": "Bruges",
+      "country": "Belgium",
+      "flag": "🇧🇪"
+    },
+    {
+      "name": "Brussels",
+      "country": "Belgium",
+      "flag": "🇧🇪"
+    },
+    {
+      "name": "Budapest",
+      "country": "Hungary",
+      "flag": "🇭🇺"
+    },
+    {
+      "name": "Buenos Aires",
+      "country": "Argentina",
+      "flag": "🇦🇷"
+    },
+    {
+      "name": "Busan",
+      "country": "South Korea",
+      "flag": "🇰🇷"
+    },
+    {
+      "name": "Cairo",
+      "country": "Egypt",
+      "flag": "🇪🇬"
+    },
+    {
+      "name": "Cape Town",
+      "country": "South Africa",
+      "flag": "🇿🇦"
+    },
+    {
+      "name": "Cartagena",
+      "country": "Colombia",
+      "flag": "🇨🇴"
+    },
+    {
+      "name": "Chicago",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "Copenhagen",
+      "country": "Denmark",
+      "flag": "🇩🇰"
+    },
+    {
+      "name": "Cusco",
+      "country": "Peru",
+      "flag": "🇵🇪"
+    },
+    {
+      "name": "Denver",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "Dublin",
+      "country": "Ireland",
+      "flag": "🇮🇪"
+    },
+    {
+      "name": "Dubrovnik",
+      "country": "Croatia",
+      "flag": "🇭🇷"
+    },
+    {
+      "name": "Edinburgh",
+      "country": "United Kingdom",
+      "flag": "🇬🇧"
+    },
+    {
+      "name": "Florence",
+      "country": "Italy",
+      "flag": "🇮🇹"
+    },
+    {
+      "name": "Geneva",
+      "country": "Switzerland",
+      "flag": "🇨🇭"
+    },
+    {
+      "name": "Halifax",
+      "country": "Canada",
+      "flag": "🇨🇦"
+    },
+    {
+      "name": "Hanoi",
+      "country": "Vietnam",
+      "flag": "🇻🇳"
+    },
+    {
+      "name": "Havana",
+      "country": "Cuba",
+      "flag": "🇨🇺"
+    },
+    {
+      "name": "Helsinki",
+      "country": "Finland",
+      "flag": "🇫🇮"
+    },
+    {
+      "name": "Ho Chi Minh City",
+      "country": "Vietnam",
+      "flag": "🇻🇳"
+    },
+    {
+      "name": "Honolulu",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "Kathmandu",
+      "country": "Nepal",
+      "flag": "🇳🇵"
+    },
+    {
+      "name": "Kraków",
+      "country": "Poland",
+      "flag": "🇵🇱"
+    },
+    {
+      "name": "Kuala Lumpur",
+      "country": "Malaysia",
+      "flag": "🇲🇾"
+    },
+    {
+      "name": "Kyoto",
+      "country": "Japan",
+      "flag": "🇯🇵"
+    },
+    {
+      "name": "La Fortuna",
+      "country": "Costa Rica",
+      "flag": "🇨🇷"
+    },
+    {
+      "name": "Las Vegas",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "Lima",
+      "country": "Peru",
+      "flag": "🇵🇪"
+    },
+    {
+      "name": "Lisbon",
+      "country": "Portugal",
+      "flag": "🇵🇹"
+    },
+    {
+      "name": "Ljubljana",
+      "country": "Slovenia",
+      "flag": "🇸🇮"
+    },
+    {
+      "name": "London",
+      "country": "United Kingdom",
+      "flag": "🇬🇧"
+    },
+    {
+      "name": "Los Angeles",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "Lyon",
+      "country": "France",
+      "flag": "🇫🇷"
+    },
+    {
+      "name": "Madeira",
+      "country": "Portugal",
+      "flag": "🇵🇹"
+    },
+    {
+      "name": "Madrid",
+      "country": "Spain",
+      "flag": "🇪🇸"
+    },
+    {
+      "name": "Malta",
+      "country": "Malta",
+      "flag": "🇲🇹"
+    },
+    {
+      "name": "Marrakech",
+      "country": "Morocco",
+      "flag": "🇲🇦"
+    },
+    {
+      "name": "Marseille",
+      "country": "France",
+      "flag": "🇫🇷"
+    },
+    {
+      "name": "Melbourne",
+      "country": "Australia",
+      "flag": "🇦🇺"
+    },
+    {
+      "name": "Mendoza",
+      "country": "Argentina",
+      "flag": "🇦🇷"
+    },
+    {
+      "name": "Mexico City",
+      "country": "Mexico",
+      "flag": "🇲🇽"
+    },
+    {
+      "name": "Miami",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "Milan",
+      "country": "Italy",
+      "flag": "🇮🇹"
+    },
+    {
+      "name": "Montreal",
+      "country": "Canada",
+      "flag": "🇨🇦"
+    },
+    {
+      "name": "Mumbai",
+      "country": "India",
+      "flag": "🇮🇳"
+    },
+    {
+      "name": "Munich",
+      "country": "Germany",
+      "flag": "🇩🇪"
+    },
+    {
+      "name": "Mykonos",
+      "country": "Greece",
+      "flag": "🇬🇷"
+    },
+    {
+      "name": "Nairobi",
+      "country": "Kenya",
+      "flag": "🇰🇪"
+    },
+    {
+      "name": "Nashville",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "New Delhi",
+      "country": "India",
+      "flag": "🇮🇳"
+    },
+    {
+      "name": "New Orleans",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "New York City",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "Nice",
+      "country": "France",
+      "flag": "🇫🇷"
+    },
+    {
+      "name": "Orlando",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "Osaka",
+      "country": "Japan",
+      "flag": "🇯🇵"
+    },
+    {
+      "name": "Oslo",
+      "country": "Norway",
+      "flag": "🇳🇴"
+    },
+    {
+      "name": "Ottawa",
+      "country": "Canada",
+      "flag": "🇨🇦"
+    },
+    {
+      "name": "Palma de Mallorca",
+      "country": "Spain",
+      "flag": "🇪🇸"
+    },
+    {
+      "name": "Panama City",
+      "country": "Panama",
+      "flag": "🇵🇦"
+    },
+    {
+      "name": "Paris",
+      "country": "France",
+      "flag": "🇫🇷"
+    },
+    {
+      "name": "Penang",
+      "country": "Malaysia",
+      "flag": "🇲🇾"
+    },
+    {
+      "name": "Phoenix",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "Phuket",
+      "country": "Thailand",
+      "flag": "🇹🇭"
+    },
+    {
+      "name": "Porto",
+      "country": "Portugal",
+      "flag": "🇵🇹"
+    },
+    {
+      "name": "Prague",
+      "country": "Czechia",
+      "flag": "🇨🇿"
+    },
+    {
+      "name": "Quebec City",
+      "country": "Canada",
+      "flag": "🇨🇦"
+    },
+    {
+      "name": "Queenstown",
+      "country": "New Zealand",
+      "flag": "🇳🇿"
+    },
+    {
+      "name": "Reykjavik",
+      "country": "Iceland",
+      "flag": "🇮🇸"
+    },
+    {
+      "name": "Rio de Janeiro",
+      "country": "Brazil",
+      "flag": "🇧🇷"
+    },
+    {
+      "name": "Rome",
+      "country": "Italy",
+      "flag": "🇮🇹"
+    },
+    {
+      "name": "Salzburg",
+      "country": "Austria",
+      "flag": "🇦🇹"
+    },
+    {
+      "name": "San Antonio",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "San Diego",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "San Francisco",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "Santiago",
+      "country": "Chile",
+      "flag": "🇨🇱"
+    },
+    {
+      "name": "Santorini",
+      "country": "Greece",
+      "flag": "🇬🇷"
+    },
+    {
+      "name": "Sapporo",
+      "country": "Japan",
+      "flag": "🇯🇵"
+    },
+    {
+      "name": "Seattle",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "Seoul",
+      "country": "South Korea",
+      "flag": "🇰🇷"
+    },
+    {
+      "name": "Seville",
+      "country": "Spain",
+      "flag": "🇪🇸"
+    },
+    {
+      "name": "Shanghai",
+      "country": "China",
+      "flag": "🇨🇳"
+    },
+    {
+      "name": "Sicily",
+      "country": "Italy",
+      "flag": "🇮🇹"
+    },
+    {
+      "name": "Singapore",
+      "country": "Singapore",
+      "flag": "🇸🇬"
+    },
+    {
+      "name": "Split",
+      "country": "Croatia",
+      "flag": "🇭🇷"
+    },
+    {
+      "name": "Stockholm",
+      "country": "Sweden",
+      "flag": "🇸🇪"
+    },
+    {
+      "name": "Sydney",
+      "country": "Australia",
+      "flag": "🇦🇺"
+    },
+    {
+      "name": "São Paulo",
+      "country": "Brazil",
+      "flag": "🇧🇷"
+    },
+    {
+      "name": "Taipei",
+      "country": "Taiwan",
+      "flag": "🇹🇼"
+    },
+    {
+      "name": "Tokyo",
+      "country": "Japan",
+      "flag": "🇯🇵"
+    },
+    {
+      "name": "Toronto",
+      "country": "Canada",
+      "flag": "🇨🇦"
+    },
+    {
+      "name": "Valencia",
+      "country": "Spain",
+      "flag": "🇪🇸"
+    },
+    {
+      "name": "Vancouver",
+      "country": "Canada",
+      "flag": "🇨🇦"
+    },
+    {
+      "name": "Venice",
+      "country": "Italy",
+      "flag": "🇮🇹"
+    },
+    {
+      "name": "Vienna",
+      "country": "Austria",
+      "flag": "🇦🇹"
+    },
+    {
+      "name": "Warsaw",
+      "country": "Poland",
+      "flag": "🇵🇱"
+    },
+    {
+      "name": "Washington, D.C.",
+      "country": "USA",
+      "flag": "🇺🇸"
+    },
+    {
+      "name": "Zurich",
+      "country": "Switzerland",
+      "flag": "🇨🇭"
+    }
+  ]
+}

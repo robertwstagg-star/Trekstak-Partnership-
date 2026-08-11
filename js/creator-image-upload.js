@@ -167,7 +167,7 @@
       });
   }
 
-  function uploadCreatorVideo(slug, file, refId, refId2, kind) {
+  function uploadCreatorVideo(slug, file, tripId, dayId) {
     if (!slug || !file) {
       return Promise.reject(new Error("Missing slug or file"));
     }
@@ -180,44 +180,27 @@
     }
 
     var safeSlug = String(slug).toLowerCase().replace(/[^a-z0-9-]/g, "");
+    var safeTrip = String(tripId || "trip")
+      .replace(/[^a-z0-9-_]/gi, "")
+      .slice(0, 40);
+    var safeDay = String(dayId || "day")
+      .replace(/[^a-z0-9-_]/gi, "")
+      .slice(0, 40);
     var stamp = Date.now();
     var ext = "mp4";
     if (file.type.indexOf("quicktime") >= 0) ext = "mov";
     else if (file.type.indexOf("webm") >= 0) ext = "webm";
-    var path;
-
-    if (kind === "post") {
-      var safePost = String(refId || "post")
-        .replace(/[^a-z0-9-_]/gi, "")
-        .slice(0, 40);
-      path =
-        "creator_pages/" +
-        safeSlug +
-        "/posts/" +
-        safePost +
-        "-video-" +
-        stamp +
-        "." +
-        ext;
-    } else {
-      var safeTrip = String(refId || "trip")
-        .replace(/[^a-z0-9-_]/gi, "")
-        .slice(0, 40);
-      var safeDay = String(refId2 || "day")
-        .replace(/[^a-z0-9-_]/gi, "")
-        .slice(0, 40);
-      path =
-        "creator_pages/" +
-        safeSlug +
-        "/trips/" +
-        safeTrip +
-        "/day-" +
-        safeDay +
-        "-video-" +
-        stamp +
-        "." +
-        ext;
-    }
+    var path =
+      "creator_pages/" +
+      safeSlug +
+      "/trips/" +
+      safeTrip +
+      "/day-" +
+      safeDay +
+      "-video-" +
+      stamp +
+      "." +
+      ext;
 
     return ensureFirebase()
       .then(function (fb) {
