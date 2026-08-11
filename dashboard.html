@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=3" />
-  <link rel="stylesheet" href="dashboard.css?v=16" />
-  <link rel="stylesheet" href="webapp-shell.css?v=1" />
+  <link rel="stylesheet" href="dashboard.css?v=17" />
+  <link rel="stylesheet" href="webapp-shell.css?v=2" />
   <link rel="manifest" href="manifest.webmanifest" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -29,6 +29,7 @@
         <a href="dashboard.html" class="is-active" aria-current="page">Dashboard</a>
         <a href="payment-schedule.html">Payouts</a>
         <a href="https://creators.trekstakapp.com">Creator pages</a>
+        <a id="link-open-browser" class="partner-toolbar-exit" href="https://partners.trekstakapp.com/dashboard.html" hidden>Open in browser</a>
       </nav>
     </div>
   </header>
@@ -80,7 +81,15 @@
         </div>
       </div>
 
-      <section class="dash-panel page-editor-panel" data-app-view="page" aria-labelledby="page-profile-heading">
+      <nav class="page-section-nav" id="page-section-nav" data-app-view="page" aria-label="Page sections" hidden>
+        <button type="button" class="page-section-btn is-active" data-page-section="profile">Profile</button>
+        <button type="button" class="page-section-btn" data-page-section="radar">Radar</button>
+        <button type="button" class="page-section-btn" data-page-section="cities">Cities</button>
+        <button type="button" class="page-section-btn" data-page-section="live">Live</button>
+        <button type="button" class="page-section-btn" data-page-section="posts">Posts</button>
+      </nav>
+
+      <section class="dash-panel page-editor-panel" data-app-view="page" data-page-section="profile" aria-labelledby="page-profile-heading">
         <div class="dash-panel-head dash-panel-head--section">
           <h2 id="page-profile-heading">Profile</h2>
           <a id="link-public-page-inline" href="#" target="_blank" rel="noopener">View live page</a>
@@ -130,7 +139,7 @@
         </form>
       </section>
 
-      <section class="dash-panel page-editor-panel" data-app-view="page" aria-labelledby="trip-radar-heading">
+      <section class="dash-panel page-editor-panel" data-app-view="page" data-page-section="radar" aria-labelledby="trip-radar-heading" hidden>
         <div class="dash-panel-head dash-panel-head--section">
           <h2 id="trip-radar-heading">Trip radar</h2>
           <button type="button" class="btn btn-primary btn-sm" id="btn-new-trip">Add trip</button>
@@ -187,7 +196,7 @@
         <div id="trips-list" class="posts-admin-list" aria-live="polite"></div>
       </section>
 
-      <section class="dash-panel page-editor-panel" data-app-view="page" aria-labelledby="city-week-heading">
+      <section class="dash-panel page-editor-panel" data-app-view="page" data-page-section="cities" aria-labelledby="city-week-heading" hidden>
         <div class="dash-panel-head dash-panel-head--section">
           <h2 id="city-week-heading">City of the week</h2>
         </div>
@@ -260,7 +269,7 @@
         </form>
       </section>
 
-      <section class="dash-panel page-editor-panel" data-app-view="page" aria-labelledby="city-reviews-heading">
+      <section class="dash-panel page-editor-panel" data-app-view="page" data-page-section="cities" aria-labelledby="city-reviews-heading" hidden>
         <div class="dash-panel-head dash-panel-head--section">
           <h2 id="city-reviews-heading">City ratings</h2>
           <button type="button" class="btn btn-primary btn-sm" id="btn-new-city-review">Add review</button>
@@ -294,7 +303,7 @@
         <div id="city-reviews-list" class="posts-admin-list" aria-live="polite"></div>
       </section>
 
-      <section class="dash-panel page-editor-panel" data-app-view="page" aria-labelledby="live-trip-heading">
+      <section class="dash-panel page-editor-panel" data-app-view="page" data-page-section="live" aria-labelledby="live-trip-heading" hidden>
         <div class="dash-panel-head dash-panel-head--section">
           <h2 id="live-trip-heading">Live trip</h2>
           <button type="button" class="btn btn-primary btn-sm" id="btn-add-live-trip-day" hidden>Add today&rsquo;s update</button>
@@ -445,7 +454,7 @@
         </div>
       </section>
 
-      <section class="dash-panel page-editor-panel" data-app-view="page" aria-labelledby="page-posts-heading">
+      <section class="dash-panel page-editor-panel" data-app-view="page" data-page-section="posts" aria-labelledby="page-posts-heading" hidden>
         <div class="dash-panel-head dash-panel-head--section">
           <h2 id="page-posts-heading">Posts</h2>
           <button type="button" class="btn btn-primary btn-sm" id="btn-new-post">New post</button>
@@ -539,7 +548,7 @@
         <div id="posts-list" class="posts-admin-list" aria-live="polite"></div>
       </section>
 
-      <section class="dash-panel" data-app-view="share" aria-labelledby="share-heading" hidden>
+      <section class="dash-panel" data-app-view="tools" aria-labelledby="share-heading" hidden>
         <div class="dash-panel-head dash-panel-head--section">
           <h2 id="share-heading">Tool Kit</h2>
         </div>
@@ -679,11 +688,11 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="firebase-config.js?v=3"></script>
   <script src="smooth-scroll.js?v=2"></script>
-  <script src="webapp-shell.js?v=1"></script>
+  <script src="webapp-shell.js?v=2"></script>
   <script src="creator-public-store.js?v=7"></script>
   <script src="creator-image-upload.js?v=7"></script>
   <script src="dashboard-page.js?v=14"></script>
-  <script src="dashboard.js?v=10"></script>
+  <script src="dashboard.js?v=11"></script>
   <script>
     if (window.TrekStakWebApp && TrekStakWebApp.registerServiceWorker) {
       TrekStakWebApp.registerServiceWorker("sw.js");

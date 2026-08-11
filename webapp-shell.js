@@ -4,7 +4,8 @@
   var NAV_ICONS = {
     page: "\u25A3",
     earn: "\u0024",
-    share: "\u2197",
+    tools: "\u2699",
+    share: "\u2699",
     home: "\u2302",
     live: "\u25CF",
     cities: "\u2637",
