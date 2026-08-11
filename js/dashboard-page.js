@@ -24,6 +24,58 @@
     }
   }
 
+  function profileInitials(name) {
+    var parts = String(name || "C")
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+    if (parts.length >= 2) {
+      return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+    }
+    return (parts[0] ? parts[0].charAt(0) : "C").toUpperCase();
+  }
+
+  function updateProfilePreview(avatarOverride) {
+    if (!activeCreator) return;
+
+    var nameEl = document.getElementById("profile-preview-name");
+    var handleEl = document.getElementById("profile-preview-handle");
+    var bioEl = document.getElementById("profile-preview-bio");
+    var imgEl = document.getElementById("profile-preview-avatar-img");
+    var initialsEl = document.getElementById("profile-preview-initials");
+    var bioInput = document.getElementById("profile-bio");
+    var avatarInput = document.getElementById("profile-avatar");
+    var bio = bioInput ? bioInput.value.trim() : activeCreator.bio || "";
+    var avatarUrl =
+      avatarOverride != null
+        ? String(avatarOverride).trim()
+        : avatarInput
+          ? avatarInput.value.trim()
+          : activeCreator.avatarUrl || "";
+
+    if (nameEl) nameEl.textContent = activeCreator.displayName || "Creator";
+    if (handleEl) {
+      handleEl.textContent =
+        (activeCreator.role || "Creator") + " · " + (activeCreator.handle || "@handle");
+    }
+    if (bioEl) {
+      bioEl.textContent = bio || "Add a short bio so followers know what you're about.";
+      bioEl.classList.toggle("is-placeholder", !bio);
+    }
+    if (imgEl && initialsEl) {
+      if (avatarUrl) {
+        imgEl.src = avatarUrl;
+        imgEl.hidden = false;
+        initialsEl.hidden = true;
+      } else {
+        imgEl.removeAttribute("src");
+        imgEl.hidden = true;
+        initialsEl.textContent = profileInitials(activeCreator.displayName);
+        initialsEl.hidden = false;
+      }
+    }
+  }
+
   function uploadImageFile(file, kind, refId, refId2) {
     if (!window.CreatorImageUpload) {
       return Promise.reject(new Error("Upload module not loaded"));
@@ -128,6 +180,7 @@
 
     var localPreview = URL.createObjectURL(file);
     setImagePreview(options.previewWrapId, options.previewImgId, localPreview);
+    if (options.onPreview) options.onPreview(localPreview);
     setUploadStatus(options.statusEl, "Uploading photo…", "is-busy");
 
     var refId = options.postId || options.tripId;
@@ -214,7 +267,6 @@
       return Promise.reject(new Error("CreatorPublicStore missing"));
     }
     renderPostsList();
-    renderTripsList();
     renderCityReviewsList();
     renderLiveTripUI();
     return CreatorPublicStore.savePublicFields(activeCreator)
@@ -255,6 +307,7 @@
     if (yt) yt.value = socials.youtube || "";
     setImagePreview("profile-avatar-preview", "profile-avatar-preview-img", creator.avatarUrl || "");
     setUploadStatus(document.getElementById("profile-avatar-status"), "", "");
+    updateProfilePreview();
   }
 
   function renderPostsList() {
@@ -389,6 +442,7 @@
             note.textContent = "";
           }, 3000);
         }
+        updateProfilePreview();
       })
       .catch(function () {
         /* toast already shown */
@@ -510,10 +564,6 @@
     return null;
   }
 
-  function updateTripCityHint() {
-    updateCityMatchHint("trip-city", "trip-city-hint");
-  }
-
   function updateCotwCityHint() {
     updateCityMatchHint("cotw-city", "cotw-city-hint");
   }
@@ -540,107 +590,6 @@
       hint.textContent =
         "Not in TrekStak yet — pick from the suggestions if you can, so followers can open that city in the app.";
     }
-  }
-
-  function tripFlagLabel(trip) {
-    if (!trip) return "";
-    if (trip.flag) return trip.flag;
-    var match = findTrekstakCity(trip.city);
-    return match && match.flag ? match.flag : "";
-  }
-
-  var TRIP_STATUS_LABEL = {
-    upcoming: "Upcoming",
-    currently: "There now",
-    "just-back": "Just back"
-  };
-
-  var TRIP_STATUS_ORDER = {
-    currently: 0,
-    upcoming: 1,
-    "just-back": 2
-  };
-
-  function sortTrips(trips) {
-    return (trips || [])
-      .slice()
-      .sort(function (a, b) {
-        var oa = TRIP_STATUS_ORDER[a.status] != null ? TRIP_STATUS_ORDER[a.status] : 9;
-        var ob = TRIP_STATUS_ORDER[b.status] != null ? TRIP_STATUS_ORDER[b.status] : 9;
-        if (oa !== ob) return oa - ob;
-        return String(a.city || "").localeCompare(String(b.city || ""));
-      });
-  }
-
-  function getTripFocusValues() {
-    return Array.prototype.slice
-      .call(document.querySelectorAll('input[name="trip-focus"]:checked'))
-      .map(function (el) {
-        return el.value;
-      });
-  }
-
-  function setTripFocusValues(focus) {
-    var selected = focus || [];
-    document.querySelectorAll('input[name="trip-focus"]').forEach(function (el) {
-      el.checked = selected.indexOf(el.value) !== -1;
-    });
-  }
-
-  function renderTripsList() {
-    var listEl = document.getElementById("trips-list");
-    if (!listEl || !activeCreator) return;
-
-    var trips = sortTrips(activeCreator.tripRadar);
-    if (!trips.length) {
-      listEl.innerHTML =
-        '<p class="posts-empty">No trips yet. Add where you are headed so followers see it on your page.</p>';
-      return;
-    }
-
-    listEl.innerHTML = trips
-      .map(function (trip) {
-        var status = trip.status || "upcoming";
-        var statusLabel = TRIP_STATUS_LABEL[status] || status;
-        var focus = trip.focus || [];
-        return (
-          '<article class="post-admin-card" data-trip-id="' +
-          escapeHtml(trip.id) +
-          '">' +
-          '<div class="post-admin-head">' +
-          "<div>" +
-          (tripFlagLabel(trip)
-            ? '<span class="trip-flag" aria-hidden="true">' +
-              tripFlagLabel(trip) +
-              "</span> "
-            : "") +
-          "<strong>" +
-          escapeHtml(trip.city || "Trip") +
-          "</strong>" +
-          (trip.country
-            ? '<span class="trip-country">' + escapeHtml(trip.country) + "</span>"
-            : "") +
-          '<span class="status-pill ' +
-          escapeHtml(status) +
-          '">' +
-          escapeHtml(statusLabel) +
-          "</span>" +
-          "</div>" +
-          '<div class="post-admin-actions">' +
-          '<button type="button" class="btn btn-outline btn-sm" data-trip-action="edit">Edit</button>' +
-          '<button type="button" class="btn btn-outline btn-sm" data-trip-action="delete">Delete</button>' +
-          "</div></div>" +
-          '<p class="post-admin-meta">' +
-          escapeHtml(trip.when || "") +
-          (focus.length ? " · " + escapeHtml(focus.join(", ")) : "") +
-          "</p>" +
-          (trip.why
-            ? '<p class="post-admin-preview">' + escapeHtml(trip.why) + "</p>"
-            : "") +
-          "</article>"
-        );
-      })
-      .join("");
   }
 
   function getCotwTipsFromForm() {
@@ -1500,115 +1449,24 @@
       });
   }
 
-  function resetTripForm() {
-    var editor = document.getElementById("trip-editor");
-    var title = document.getElementById("trip-editor-title");
-    var form = document.getElementById("trip-form");
-    if (title) title.textContent = "New trip";
-    if (form) form.reset();
-    var tripId = document.getElementById("trip-id");
-    if (tripId) tripId.value = "";
-    var status = document.getElementById("trip-status");
-    if (status) status.value = "upcoming";
-    setTripFocusValues([]);
-    if (editor) editor.hidden = true;
-  }
-
-  function openTripEditor(trip) {
-    var editor = document.getElementById("trip-editor");
-    var title = document.getElementById("trip-editor-title");
-    if (!editor || !activeCreator) return;
-
-    if (title) title.textContent = trip ? "Edit trip" : "New trip";
-    document.getElementById("trip-id").value = trip
-      ? trip.id
-      : generatePostId(activeCreator.slug + "-trip");
-    document.getElementById("trip-city").value = trip ? trip.city || "" : "";
-    document.getElementById("trip-when").value = trip ? trip.when || "" : "";
-    document.getElementById("trip-why").value = trip ? trip.why || "" : "";
-    document.getElementById("trip-status").value = trip ? trip.status || "upcoming" : "upcoming";
-    setTripFocusValues(trip ? trip.focus || [] : []);
-    updateTripCityHint();
-
-    editor.hidden = false;
-    editor.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }
-
-  function handleTripSubmit(event) {
-    event.preventDefault();
-    if (!activeCreator) return;
-
-    var city = document.getElementById("trip-city").value.trim();
-    var when = document.getElementById("trip-when").value.trim();
-    if (!city || !when) {
-      notifySaved("City and when are required");
-      return;
-    }
-
-    var matched = findTrekstakCity(city);
-    if (matched) {
-      city = matched.name;
-    }
-
-    var tripData = {
-      id: document.getElementById("trip-id").value || generatePostId(activeCreator.slug + "-trip"),
-      city: city,
-      when: when,
-      why: document.getElementById("trip-why").value.trim(),
-      status: document.getElementById("trip-status").value || "upcoming",
-      focus: getTripFocusValues(),
-      inTrekstak: !!matched,
-      country: matched ? matched.country || "" : "",
-      flag: matched ? matched.flag || "" : ""
-    };
-
-    if (!activeCreator.tripRadar) activeCreator.tripRadar = [];
-
-    var existingIndex = -1;
-    for (var i = 0; i < activeCreator.tripRadar.length; i++) {
-      if (activeCreator.tripRadar[i].id === tripData.id) {
-        existingIndex = i;
-        break;
-      }
-    }
-
-    if (existingIndex >= 0) {
-      activeCreator.tripRadar[existingIndex] = tripData;
-    } else {
-      activeCreator.tripRadar.unshift(tripData);
-    }
-
-    persistCreator()
-      .then(function () {
-        notifySaved(existingIndex >= 0 ? "Trip updated" : "Trip added");
-        resetTripForm();
-      })
-      .catch(function () {
-        /* toast already shown */
-      });
-  }
-
-  function deleteTrip(tripId) {
-    if (!activeCreator || !activeCreator.tripRadar) return;
-    if (!window.confirm("Remove this trip from your public page?")) {
-      return;
-    }
-    activeCreator.tripRadar = activeCreator.tripRadar.filter(function (t) {
-      return t.id !== tripId;
-    });
-    persistCreator()
-      .then(function () {
-        notifySaved("Trip removed");
-      })
-      .catch(function () {
-        /* toast already shown */
-      });
-  }
-
   function bindEvents() {
     var profileForm = document.getElementById("profile-form");
     if (profileForm) {
       profileForm.addEventListener("submit", handleProfileSubmit);
+    }
+
+    var profileBio = document.getElementById("profile-bio");
+    if (profileBio) {
+      profileBio.addEventListener("input", function () {
+        updateProfilePreview();
+      });
+    }
+
+    var profileAvatarUrl = document.getElementById("profile-avatar");
+    if (profileAvatarUrl) {
+      profileAvatarUrl.addEventListener("input", function () {
+        updateProfilePreview();
+      });
     }
 
     var postForm = document.getElementById("post-form");
@@ -1625,7 +1483,9 @@
           previewWrapId: "profile-avatar-preview",
           previewImgId: "profile-avatar-preview-img",
           urlInput: document.getElementById("profile-avatar"),
-          statusEl: document.getElementById("profile-avatar-status")
+          statusEl: document.getElementById("profile-avatar-status"),
+          onPreview: updateProfilePreview,
+          onUploaded: updateProfilePreview
         });
         avatarFileInput.value = "";
       });
@@ -1681,18 +1541,6 @@
     var cancelPostBtn = document.getElementById("btn-cancel-post");
     if (cancelPostBtn) {
       cancelPostBtn.addEventListener("click", resetPostForm);
-    }
-
-    var tripForm = document.getElementById("trip-form");
-    if (tripForm) {
-      tripForm.addEventListener("submit", handleTripSubmit);
-    }
-
-    var tripCity = document.getElementById("trip-city");
-    if (tripCity) {
-      tripCity.addEventListener("input", updateTripCityHint);
-      tripCity.addEventListener("change", updateTripCityHint);
-      tripCity.addEventListener("blur", updateTripCityHint);
     }
 
     var cotwForm = document.getElementById("city-week-form");
@@ -1916,39 +1764,6 @@
       });
     }
 
-    var newTripBtn = document.getElementById("btn-new-trip");
-    if (newTripBtn) {
-      newTripBtn.addEventListener("click", function () {
-        openTripEditor(null);
-      });
-    }
-
-    var cancelTripBtn = document.getElementById("btn-cancel-trip");
-    if (cancelTripBtn) {
-      cancelTripBtn.addEventListener("click", resetTripForm);
-    }
-
-    var tripsList = document.getElementById("trips-list");
-    if (tripsList) {
-      tripsList.addEventListener("click", function (event) {
-        var btn = event.target.closest("[data-trip-action]");
-        if (!btn) return;
-        var card = btn.closest("[data-trip-id]");
-        if (!card) return;
-        var tripId = card.getAttribute("data-trip-id");
-        var action = btn.getAttribute("data-trip-action");
-        var trip = null;
-        for (var j = 0; j < (activeCreator.tripRadar || []).length; j++) {
-          if (activeCreator.tripRadar[j].id === tripId) {
-            trip = activeCreator.tripRadar[j];
-            break;
-          }
-        }
-        if (action === "edit" && trip) openTripEditor(trip);
-        if (action === "delete") deleteTrip(tripId);
-      });
-    }
-
     var postsList = document.getElementById("posts-list");
     if (postsList) {
       postsList.addEventListener("click", function (event) {
@@ -1982,8 +1797,6 @@
       loadTrekstakCities();
       fillProfileForm(creator);
       fillCityOfTheWeekForm(creator);
-      renderTripsList();
-      resetTripForm();
       renderCityReviewsList();
       resetCityReviewEditor();
       renderLiveTripUI();
@@ -2000,7 +1813,6 @@
       activeCreator = creator;
       fillProfileForm(creator);
       fillCityOfTheWeekForm(creator);
-      renderTripsList();
       renderCityReviewsList();
       renderLiveTripUI();
       renderPostsList();

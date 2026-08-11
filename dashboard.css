@@ -258,10 +258,134 @@ body.dashboard-authed .dashboard-shell {
 .dash-panel {
   padding: 1.25rem;
   border-radius: 1.15rem;
-  border: 1px solid var(--line);
-  background: linear-gradient(160deg, #1d3157, #101c33);
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(160deg, #243552 0%, #152238 55%, #101c33 100%);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.28);
   margin-bottom: 1.25rem;
+}
+
+/* Profile — warmer surface + live preview so it reads above other blue panels */
+.dash-panel--profile {
+  background: linear-gradient(165deg, #3d2a1a 0%, #243552 38%, #121f38 100%);
+  border-color: rgba(254, 130, 0, 0.42);
+  box-shadow:
+    0 22px 44px rgba(0, 0, 0, 0.32),
+    0 0 0 1px rgba(254, 130, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.profile-preview-card {
+  margin-bottom: 1.15rem;
+  padding: 0.95rem 1rem 1rem;
+  border-radius: 1rem;
+  background: rgba(8, 12, 22, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.profile-preview-label {
+  margin: 0 0 0.75rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.profile-preview-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.profile-preview-avatar {
+  flex-shrink: 0;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, rgba(254, 130, 0, 0.28), rgba(254, 130, 0, 0.08));
+  border: 2px solid rgba(254, 130, 0, 0.72);
+  box-shadow: 0 10px 28px rgba(254, 130, 0, 0.22);
+}
+
+.profile-preview-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.profile-preview-initials {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffd4a8;
+  line-height: 1;
+}
+
+.profile-preview-body {
+  min-width: 0;
+  flex: 1;
+  padding-top: 0.15rem;
+}
+
+.profile-preview-name {
+  margin: 0 0 0.2rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 3vw, 1.35rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #fff;
+  line-height: 1.15;
+}
+
+.profile-preview-handle {
+  margin: 0 0 0.55rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #ffc48a;
+}
+
+.profile-preview-bio {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.profile-preview-bio.is-placeholder {
+  color: rgba(255, 255, 255, 0.48);
+  font-style: italic;
+}
+
+.dash-panel--profile .panel-note {
+  margin-top: 0;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.65rem;
+  background: rgba(254, 130, 0, 0.1);
+  border-left: 3px solid var(--orange);
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.dash-panel--profile .page-form input[type="text"],
+.dash-panel--profile .page-form input[type="url"],
+.dash-panel--profile .page-form textarea {
+  background: rgba(0, 0, 0, 0.32);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.dash-panel--profile .page-form input:focus,
+.dash-panel--profile .page-form textarea:focus {
+  border-color: rgba(254, 130, 0, 0.65);
+  box-shadow: 0 0 0 2px rgba(254, 130, 0, 0.15);
+}
+
+.dash-panel--profile .form-actions .btn-primary {
+  box-shadow: 0 8px 20px rgba(254, 130, 0, 0.28);
 }
 
 .dash-panel-head {
@@ -1025,7 +1149,7 @@ body.dashboard-authed .dashboard-shell {
 
 .page-section-nav {
   display: grid;
-  grid-template-columns: auto repeat(5, minmax(0, 1fr));
+  grid-template-columns: auto repeat(4, minmax(0, 1fr));
   gap: 0.3rem;
   align-items: center;
   margin: 0 0 1rem;
@@ -1072,13 +1196,21 @@ body.dashboard-authed .dashboard-shell {
 }
 
 .page-section-btn.is-active {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--ink);
+  background: rgba(254, 130, 0, 0.2);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(254, 130, 0, 0.38);
+}
+
+.page-section-btn.is-active[data-section-tab="profile"] {
+  background: linear-gradient(135deg, rgba(254, 130, 0, 0.38), rgba(254, 130, 0, 0.16));
+  box-shadow:
+    inset 0 0 0 1px rgba(254, 130, 0, 0.45),
+    0 4px 14px rgba(254, 130, 0, 0.15);
 }
 
 @media (max-width: 520px) {
   .page-section-nav {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .page-section-nav-label {

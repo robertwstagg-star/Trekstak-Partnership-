@@ -50,30 +50,6 @@
           "tags": ["behind-the-scenes"]
         }
       ],
-      "tripRadar": [
-        {
-          "id": "trip-lisbon",
-          "city": "Lisbon",
-          "country": "Portugal",
-          "flag": "🇵🇹",
-          "when": "Sep 2026",
-          "status": "upcoming",
-          "why": "Food walks and neighborhood hopping — building day plans in TrekStak before I land.",
-          "focus": ["food", "walks", "planning"],
-          "inTrekstak": true
-        },
-        {
-          "id": "trip-vancouver",
-          "city": "Vancouver",
-          "country": "Canada",
-          "flag": "🇨🇦",
-          "when": "This month",
-          "status": "currently",
-          "why": "Home base test runs: family activities and quick escapes on weekends.",
-          "focus": ["family", "planning"],
-          "inTrekstak": true
-        }
-      ],
       "cityOfTheWeek": {
         "city": "Lisbon",
         "country": "Portugal",

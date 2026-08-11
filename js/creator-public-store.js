@@ -44,7 +44,6 @@
         creator.socials || {}
       ),
       posts: Array.isArray(creator.posts) ? creator.posts.slice() : [],
-      tripRadar: Array.isArray(creator.tripRadar) ? creator.tripRadar.slice() : [],
       cityOfTheWeek: normalizeCityOfTheWeek(creator.cityOfTheWeek),
       cityReviews: normalizeCityReviews(creator.cityReviews),
       liveTrip: normalizeLiveTrip(creator.liveTrip)
@@ -190,9 +189,6 @@
       avatarUrl: overlay.avatarUrl != null ? overlay.avatarUrl : base.avatarUrl,
       socials: Object.assign({}, base.socials, overlay.socials || {}),
       posts: Array.isArray(overlay.posts) ? overlay.posts.slice() : base.posts,
-      tripRadar: Array.isArray(overlay.tripRadar)
-        ? overlay.tripRadar.slice()
-        : base.tripRadar,
       cityOfTheWeek:
         overlay.cityOfTheWeek !== undefined
           ? normalizeCityOfTheWeek(overlay.cityOfTheWeek)
@@ -237,7 +233,6 @@
             data.socials || {}
           ),
           posts: Array.isArray(data.posts) ? data.posts.slice() : [],
-          tripRadar: Array.isArray(data.tripRadar) ? data.tripRadar.slice() : [],
           cityOfTheWeek: normalizeCityOfTheWeek(data.cityOfTheWeek),
           cityReviews: normalizeCityReviews(data.cityReviews),
           liveTrip: normalizeLiveTrip(data.liveTrip),

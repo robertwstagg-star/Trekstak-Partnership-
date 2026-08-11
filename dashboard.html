@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=3" />
-  <link rel="stylesheet" href="dashboard.css?v=19" />
-  <link rel="stylesheet" href="webapp-shell.css?v=2" />
+  <link rel="stylesheet" href="dashboard.css?v=21" />
+  <link rel="stylesheet" href="webapp-shell.css?v=3" />
   <link rel="manifest" href="manifest.webmanifest" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -84,13 +84,27 @@
       <nav class="page-section-nav" id="page-section-nav" aria-label="Page sections" hidden>
         <span class="page-section-nav-label">Edit</span>
         <button type="button" class="page-section-btn is-active" data-section-tab="profile">Profile</button>
-        <button type="button" class="page-section-btn" data-section-tab="radar">Radar</button>
         <button type="button" class="page-section-btn" data-section-tab="cities">Cities</button>
         <button type="button" class="page-section-btn" data-section-tab="live">Live</button>
         <button type="button" class="page-section-btn" data-section-tab="posts">Posts</button>
       </nav>
+      <datalist id="trekstak-city-list"></datalist>
 
-      <section class="dash-panel page-editor-panel" data-app-view="page" data-page-section="profile" aria-labelledby="page-profile-heading">
+      <section class="dash-panel dash-panel--profile page-editor-panel" data-app-view="page" data-page-section="profile" aria-labelledby="page-profile-heading">
+        <div class="profile-preview-card" aria-label="Public profile preview">
+          <p class="profile-preview-label">Public preview</p>
+          <div class="profile-preview-row">
+            <div class="profile-preview-avatar" id="profile-preview-avatar">
+              <img id="profile-preview-avatar-img" alt="" width="72" height="72" hidden />
+              <span class="profile-preview-initials" id="profile-preview-initials" aria-hidden="true">C</span>
+            </div>
+            <div class="profile-preview-body">
+              <p class="profile-preview-name" id="profile-preview-name">Creator</p>
+              <p class="profile-preview-handle" id="profile-preview-handle">Role · @handle</p>
+              <p class="profile-preview-bio is-placeholder" id="profile-preview-bio">Add a short bio so followers know what you're about.</p>
+            </div>
+          </div>
+        </div>
         <div class="dash-panel-head dash-panel-head--section">
           <h2 id="page-profile-heading">Profile</h2>
           <a id="link-public-page-inline" href="#" target="_blank" rel="noopener">View live page</a>
@@ -138,63 +152,6 @@
             <span id="profile-save-note" class="inline-note" aria-live="polite"></span>
           </div>
         </form>
-      </section>
-
-      <section class="dash-panel page-editor-panel" data-app-view="page" data-page-section="radar" aria-labelledby="trip-radar-heading" hidden>
-        <div class="dash-panel-head dash-panel-head--section">
-          <h2 id="trip-radar-heading">Trip radar</h2>
-          <button type="button" class="btn btn-primary btn-sm" id="btn-new-trip">Add trip</button>
-        </div>
-        <p class="panel-note">Where you&rsquo;re headed next — city, timing, and why. Prefer a TrekStak city so followers can open it in the app.</p>
-
-        <div id="trip-editor" class="post-editor" hidden>
-          <h3 id="trip-editor-title">New trip</h3>
-          <form id="trip-form" class="page-form" novalidate>
-            <input type="hidden" id="trip-id" value="" />
-            <div class="form-grid">
-              <label class="field">
-                <span>City</span>
-                <input type="text" id="trip-city" list="trekstak-city-list" required maxlength="80" placeholder="Start typing a TrekStak city…" autocomplete="off" />
-                <datalist id="trekstak-city-list"></datalist>
-                <span class="field-hint">Use a city in TrekStak so followers can open it in the app.</span>
-                <span class="field-hint field-hint--warn" id="trip-city-hint" hidden></span>
-              </label>
-              <label class="field">
-                <span>When</span>
-                <input type="text" id="trip-when" required maxlength="60" placeholder="Sep 2026 · Fall · Next month" />
-              </label>
-              <label class="field">
-                <span>Status</span>
-                <select id="trip-status">
-                  <option value="upcoming">Upcoming</option>
-                  <option value="currently">There now</option>
-                  <option value="just-back">Just back</option>
-                </select>
-              </label>
-              <label class="field field-full">
-                <span>Why / what you&rsquo;re into</span>
-                <textarea id="trip-why" rows="3" placeholder="Food + walks, testing TrekStak neighborhoods…"></textarea>
-                <span class="field-hint">Write as much or as little as you want — a line or a short paragraph.</span>
-              </label>
-              <fieldset class="field field-full chip-fieldset">
-                <legend>Using TrekStak for <em>(optional)</em></legend>
-                <div class="chip-options">
-                  <label class="chip-option"><input type="checkbox" name="trip-focus" value="walks" /> Walks</label>
-                  <label class="chip-option"><input type="checkbox" name="trip-focus" value="food" /> Food</label>
-                  <label class="chip-option"><input type="checkbox" name="trip-focus" value="family" /> Family</label>
-                  <label class="chip-option"><input type="checkbox" name="trip-focus" value="nightlife" /> Nightlife</label>
-                  <label class="chip-option"><input type="checkbox" name="trip-focus" value="planning" /> Planning</label>
-                </div>
-              </fieldset>
-            </div>
-            <div class="form-actions">
-              <button type="submit" class="btn btn-primary btn-sm">Save trip</button>
-              <button type="button" class="btn btn-outline btn-sm" id="btn-cancel-trip">Cancel</button>
-            </div>
-          </form>
-        </div>
-
-        <div id="trips-list" class="posts-admin-list" aria-live="polite"></div>
       </section>
 
       <section class="dash-panel page-editor-panel" data-app-view="page" data-page-section="cities" aria-labelledby="city-week-heading" hidden>
@@ -690,9 +647,9 @@
   <script src="firebase-config.js?v=3"></script>
   <script src="smooth-scroll.js?v=2"></script>
   <script src="webapp-shell.js?v=2"></script>
-  <script src="creator-public-store.js?v=7"></script>
+  <script src="creator-public-store.js?v=8"></script>
   <script src="creator-image-upload.js?v=7"></script>
-  <script src="dashboard-page.js?v=14"></script>
+  <script src="dashboard-page.js?v=16"></script>
   <script src="dashboard.js?v=13"></script>
   <script>
     if (window.TrekStakWebApp && TrekStakWebApp.registerServiceWorker) {
