@@ -354,6 +354,8 @@ body.dashboard-authed .dashboard-shell {
 
 /* Profile — warmer surface + live preview so it reads above other blue panels */
 .dash-panel--profile {
+  position: relative;
+  z-index: 1;
   background: linear-gradient(165deg, #2f2418 0%, #1e3354 42%, #121f38 100%);
   border-color: rgba(254, 130, 0, 0.48);
   box-shadow:
@@ -1531,10 +1533,12 @@ body.dashboard-authed .dashboard-shell {
   grid-template-columns: auto repeat(4, minmax(0, 1fr));
   gap: 0.3rem;
   align-items: center;
-  margin: 0 0 1rem;
+  position: relative;
+  z-index: 6;
+  margin: 0 0 1.15rem;
   padding: 0.35rem;
   border-radius: 12px;
-  background: rgba(5, 9, 18, 0.55);
+  background: rgba(5, 9, 18, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.2);
   width: 100%;
   min-width: 0;
@@ -1611,7 +1615,7 @@ body.dashboard-authed .dashboard-shell {
     align-items: start;
   }
 
-  .page-section-nav {
+  .dashboard-page-layout .page-section-nav {
     position: sticky;
     top: calc(8.5rem + env(safe-area-inset-top));
     flex-direction: column;
@@ -1621,7 +1625,7 @@ body.dashboard-authed .dashboard-shell {
     padding: 0.5rem;
   }
 
-  .page-section-btn {
+  .dashboard-page-layout .page-section-btn {
     width: 100%;
     text-align: left;
   }

@@ -424,7 +424,7 @@
     if (!nav || !scope || !window.TrekStakWebApp) return;
 
     var tabs = [
-      { id: "page", label: "Page" },
+      { id: "page", label: "Profile" },
       { id: "ai", label: "Creator AI" },
       { id: "earn", label: "Earn" },
       { id: "tools", label: "Tools" }
