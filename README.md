@@ -1,4 +1,16 @@
-# TrekStak Founding Creator Partner Program
+# TrekStak Partners (GitHub: Trekstak-Partnership)
+
+This repo is the **partnership site** — not the iOS app. It powers `https://partners.trekstakapp.com` and includes the Creator Hub dashboard plus Firebase Cloud Functions for Creator AI.
+
+| Folder / file | Purpose |
+|---------------|---------|
+| `dashboard.html`, `creator-ai.js`, … | Partners dashboard (GitHub Pages) |
+| `functions/` | Creator AI + auth Cloud Functions |
+| `firebase.json`, `firestore.rules` | Firebase deploy config |
+| `data/creator-accounts.json` | Demo accounts + registry seed source |
+
+**Deploy site:** `git push origin main`  
+**Deploy Firebase:** from this folder — `npm install` then `npm run deploy:creator-hub` (see `docs/CREATOR_AI_PHASE0.md`).
 
 Landing page for `https://partners.trekstakapp.com`.
 
@@ -8,7 +20,7 @@ Founding offer: first 10 creators · $200 starting collaboration · personal pro
 
 `dashboard.html` — private partner view at `https://partners.trekstakapp.com/dashboard.html`
 
-**Phase 1 (current):** demo login + sample metrics from `data/creator-accounts.json`.
+**Current:** email magic-link sign-in, Creator AI tab, Firestore sync for public pages.
 
 - Sign in with the email on the creator record (demo: `chris@demo.trekstakapp.com`)
 - Overview stats, travel reward progress, share kit, earnings table, payout details
@@ -57,7 +69,7 @@ A copy for easy upload lives at:
 
 `~/Desktop/partners-trekstakapp/`
 
-Edit in `Trekstak 1.5/partners-site/`, then re-copy to Desktop before deploying (or sync with rsync):
+Edit in `Trekstak 1.5/partners-site/` (same git repo as GitHub), then re-copy to Desktop before manual upload (or sync with rsync):
 
 ```bash
 rsync -a --delete --exclude '.git' --exclude '.DS_Store' \

@@ -1,38 +1,54 @@
-# GitHub upload checklist — Trekstak-Partnership-
+# GitHub — Trekstak-Partnership
 
-Use **`~/Desktop/partners-trekstakapp/`** as the source. Upload the **whole folder** to the repo root on GitHub — **keep subfolders**, do not flatten files into the root.
+This folder **is** the GitHub repo ([Trekstak-Partnership](https://github.com/robertwstagg-star/Trekstak-Partnership-)). It includes the **partners site** and **Firebase backend** (`functions/`), not the iOS app.
 
-## Before you upload
+## Push changes (recommended)
+
+```bash
+cd "/Users/robertstagg/Desktop/Trekstak 1.5/partners-site"
+git add .
+git commit -m "your message"
+git push origin main
+```
+
+GitHub Pages updates `partners.trekstakapp.com` after push.
+
+## Deploy Firebase (Creator AI + auth)
+
+From this same folder:
+
+```bash
+npm install
+npm run functions:install
+npx firebase login
+npx firebase use trekstak-3f419
+npm run deploy:creator-hub
+```
+
+See `docs/CREATOR_AI_PHASE0.md` and `docs/CREATOR_AI_PHASE1.md`.
+
+## Manual Desktop copy (optional)
+
+Use **`~/Desktop/partners-trekstakapp/`** if you upload via the GitHub website instead of `git push`:
 
 ```bash
 rsync -a --delete --exclude '.git' --exclude '.DS_Store' \
+  --exclude 'node_modules' --exclude 'functions/node_modules' --exclude 'functions/lib' \
   "/Users/robertstagg/Desktop/Trekstak 1.5/partners-site/" \
   "/Users/robertstagg/Desktop/partners-trekstakapp/"
 ```
 
-## Correct repo tree (must match exactly)
+## Repo tree (key paths)
 
 ```
 Trekstak-Partnership-/
-├── CNAME
-├── README.md
-├── GITHUB-UPLOAD.md
-├── index.html
-├── styles.css
-├── script.js
-├── finallogo.png              ← no space in filename
-├── dashboard.html
-├── dashboard.css
-├── dashboard.js
-├── dashboard-page.js
-├── payment-schedule.html
-├── data/
-│   └── creator-accounts.json
-└── js/
-    ├── firebase-config.js
-    ├── creator-public-store.js
-    ├── creator-image-upload.js
-    └── smooth-scroll.js
+├── firebase.json, .firebaserc, firestore.rules
+├── package.json
+├── functions/                 ← Cloud Functions (Creator AI)
+├── docs/CREATOR_AI_PHASE0.md
+├── dashboard.html, creator-ai.js, creator-hub-auth.js, …
+├── data/creator-accounts.json
+└── js/                        ← mirrored scripts for Pages
 ```
 
 ## Common mistakes (fix these if you see them)
@@ -77,15 +93,14 @@ creators-site/
     └── post-template.md
 ```
 
-## Firebase (not GitHub — one-time for photo upload)
+## Firebase storage (iOS app project — separate)
 
-From the main TrekStak project root:
+Photo upload rules live in the main TrekStak iOS project (`Trekstak 1.5/storage.rules`). Deploy from there if you change storage rules:
 
 ```bash
-firebase deploy --only storage
+cd "/Users/robertstagg/Desktop/Trekstak 1.5"
+npx firebase deploy --only storage
 ```
-
-Requires `creator_pages/` rules in `storage.rules`.
 
 ## Sync public creator data (optional)
 

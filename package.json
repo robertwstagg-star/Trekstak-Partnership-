@@ -1,0 +1,16 @@
+{
+  "name": "trekstak-partners",
+  "private": true,
+  "description": "TrekStak Partners site + Creator Hub Cloud Functions",
+  "scripts": {
+    "functions:install": "npm install --prefix functions",
+    "functions:build": "npm run build --prefix functions",
+    "seed:registry": "python3 scripts/seed-creator-registry.py",
+    "deploy:rules": "firebase deploy --only firestore:rules",
+    "deploy:functions": "npm run functions:build && firebase deploy --only functions",
+    "deploy:creator-hub": "npm run functions:build && firebase deploy --only firestore:rules,functions"
+  },
+  "devDependencies": {
+    "firebase-tools": "^14.4.0"
+  }
+}

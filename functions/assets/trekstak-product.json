@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "updatedAt": "2026-08-12",
+  "appName": "TrekStak",
+  "summary": "TrekStak is a trip-planning and in-city discovery app for travelers. Creators help their audience plan days, walks, food, and trips — then redeem an Apple Offer Code for a discounted annual subscription.",
+  "subscription": {
+    "listPriceAnnualUsd": 29.99,
+    "creatorDiscountExample": "20% off first year with a creator promo code (e.g. audience pays about $23.99/year before tax)",
+    "redemption": "In the iOS app subscription screen: Redeem promo code, then enter the creator's Apple Offer Code."
+  },
+  "creatorProgram": {
+    "commission": "25% on qualifying annual subscriptions attributed to the creator code",
+    "publicPage": "Each creator has a public page at creators.trekstakapp.com/c/{slug} with promo code and App Store link."
+  },
+  "features": [
+    {
+      "id": "self_guided_walks",
+      "label": "Self-guided walks",
+      "description": "Curated walking routes with stops, map navigation, and context at each stop."
+    },
+    {
+      "id": "neighborhoods",
+      "label": "Neighborhoods",
+      "description": "District guides: vibe, food scene, nightlife, and what each area is good for."
+    },
+    {
+      "id": "quick_escapes",
+      "label": "Quick Escapes",
+      "description": "Day trips and short outings from a base city."
+    },
+    {
+      "id": "local_flavours",
+      "label": "Local Flavours",
+      "description": "Restaurant and dining picks by city."
+    },
+    {
+      "id": "nightlife_tours",
+      "label": "Nightlife tours",
+      "description": "Evening routes and venue-led nightlife experiences."
+    },
+    {
+      "id": "family_activities",
+      "label": "Family activities",
+      "description": "Family-friendly things to do by city."
+    },
+    {
+      "id": "viewpoints_gems",
+      "label": "Viewpoints & local gems",
+      "description": "Photo-worthy spots and lesser-known picks."
+    },
+    {
+      "id": "smart_planner",
+      "label": "Smart day planner",
+      "description": "Build and organize days from favorites and city content."
+    },
+    {
+      "id": "favorites",
+      "label": "Favorites / Stak lists",
+      "description": "Save places and plans to revisit on a trip."
+    }
+  ],
+  "coverage": {
+    "citiesNote": "TrekStak covers 115+ cities worldwide. Only reference cities that are plausibly in a major travel app; do not invent TrekStak-specific venues unless provided in the prompt.",
+    "inAppCheck": "When unsure if a city is in TrekStak, phrase as 'open TrekStak and search the city' rather than claiming specific walk titles."
+  },
+  "voiceRules": [
+    "American English (center, neighborhood, traveler).",
+    "Sound like the creator, not corporate marketing.",
+    "Do not invent prices, hours, or features not listed here.",
+    "Do not claim TrekStak includes hotels, flights, or booking commissions unless explicitly in this file.",
+    "TrekStak CTAs should feel natural — mention planning a day, a walk, or stakking stops, not hard-sell jargon."
+  ]
+}

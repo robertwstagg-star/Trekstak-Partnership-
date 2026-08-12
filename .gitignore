@@ -1,0 +1,9 @@
+node_modules/
+package-lock.json
+functions/node_modules/
+functions/lib/
+*.log
+.DS_Store
+.env
+.env.*
+firebase-service-account-key.json
