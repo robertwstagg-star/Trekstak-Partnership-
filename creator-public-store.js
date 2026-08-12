@@ -70,6 +70,7 @@
       id: String(day.id || "").trim(),
       dayNumber: dayNumber,
       label: String(day.label || "").trim(),
+      date: String(day.date || "").trim(),
       headline: headline,
       summary: String(day.summary || "").trim(),
       tags: tags,
@@ -91,6 +92,9 @@
       ? trip.days.map(normalizeLiveTripDay).filter(Boolean)
       : [];
     days.sort(function (a, b) {
+      if (a.date && b.date && a.date !== b.date) {
+        return String(a.date).localeCompare(String(b.date));
+      }
       return a.dayNumber - b.dayNumber;
     });
     return {

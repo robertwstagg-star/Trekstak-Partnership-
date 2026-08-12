@@ -16,6 +16,15 @@ Founding offer: first 10 creators · $200 starting collaboration · personal pro
 
 **Phase 2:** replace JSON with Firestore + App Store Server Notifications for live Offer Code metrics; Firebase Auth magic link for sign-in.
 
+### Creator Hub auth (Phase 0)
+
+Email **magic link** sign-in + Cloud Functions `creatorHubActivateSession` (custom claim `creatorSlug`). See [`docs/CREATOR_AI_PHASE0.md`](docs/CREATOR_AI_PHASE0.md) for deploy steps.
+
+- Seed registry: `python3 scripts/seed-creator-registry.py`
+- Deploy rules + functions before expecting cloud saves from the dashboard
+- Local demo: **Preview demo locally** on `localhost` (UI only; no cloud sync)
+
+
 ### Add a founding creator to the dashboard
 
 Edit `data/creator-accounts.json` — match `slug` / `promoCode` to `creators-site/data/creators.json`.

@@ -10,8 +10,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=3" />
-  <link rel="stylesheet" href="dashboard.css?v=22" />
-  <link rel="stylesheet" href="webapp-shell.css?v=3" />
+  <link rel="stylesheet" href="dashboard.css?v=28" />
+  <link rel="stylesheet" href="creator-ai.css?v=1" />
+  <link rel="stylesheet" href="webapp-shell.css?v=4" />
   <link rel="manifest" href="manifest.webmanifest" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -38,54 +39,38 @@
     <!-- Login -->
     <section id="login-view" class="login-panel" aria-labelledby="login-heading">
       <h1 id="login-heading">Creator Dashboard</h1>
-      <p class="lede">Sign in with the email on your partnership agreement to view code activity, commissions, and share assets.</p>
+      <p class="lede">Sign in with the email on your partnership agreement. We will email you a secure one-time link — no password.</p>
 
       <p id="login-error" class="login-error" hidden></p>
+      <p id="login-link-sent" class="login-success" hidden></p>
 
       <form id="login-form" action="#" method="get" novalidate onsubmit="return false;">
         <label class="field field-full">
           <span>Email</span>
           <input type="email" id="login-email" name="email" required autocomplete="email" placeholder="you@example.com" />
         </label>
-        <button class="btn btn-primary btn-lg form-submit" type="submit" style="width:100%;margin-top:0.75rem">Sign in</button>
+        <button class="btn btn-primary btn-lg form-submit" id="login-submit" type="submit" style="width:100%;margin-top:0.75rem">Send sign-in link</button>
       </form>
 
       <p class="login-demo-note">
-        <strong>Demo access:</strong> use <code>chris@demo.trekstakapp.com</code> to preview the dashboard with sample data.
-        Live metrics will connect to App Store Offer Code tracking in a later phase.
+        <strong>Demo:</strong> use <code>chris@demo.trekstakapp.com</code> on production after registry seed.
+        On <code>localhost</code>, use <button type="button" class="login-demo-btn" id="btn-demo-local">Preview demo locally</button> for UI-only preview (cloud save needs email sign-in).
+      </p>
       </p>
     </section>
 
     <!-- Dashboard -->
     <div id="dashboard-view" hidden>
-      <div class="dashboard-header-bar" data-app-view="all">
-        <div class="dashboard-greeting">
-          <h1 id="dash-greeting-name">Creator</h1>
-          <p id="dash-role">Role · @handle</p>
-        </div>
-        <div class="dashboard-actions">
-          <a id="link-public-page" class="btn btn-outline btn-sm" href="#" target="_blank" rel="noopener">View public page</a>
-          <button type="button" id="sign-out" class="btn btn-outline btn-sm">Sign out</button>
-        </div>
-      </div>
-
-      <div id="overview" class="code-hero" data-app-view="all">
-        <div>
-          <span class="code-hero-label">Your promo code</span>
-          <div class="code-hero-value" id="code-hero-value">CODE</div>
-          <p class="code-hero-meta" id="code-hero-discount">Discount label</p>
-        </div>
-        <div class="code-hero-buttons">
-          <button type="button" class="btn btn-primary btn-sm" id="btn-copy-code">Copy code</button>
-          <button type="button" class="btn btn-outline btn-sm" id="btn-copy-page">Copy page link</button>
-        </div>
+      <div class="dashboard-toolbar" data-app-view="all">
+        <a id="link-public-page" class="btn btn-outline btn-sm" href="#" target="_blank" rel="noopener">View public page</a>
+        <button type="button" id="sign-out" class="btn btn-outline btn-sm">Sign out</button>
       </div>
 
       <nav class="page-section-nav" id="page-section-nav" aria-label="Page sections" hidden>
         <span class="page-section-nav-label">Edit</span>
         <button type="button" class="page-section-btn is-active" data-section-tab="profile">Profile</button>
-        <button type="button" class="page-section-btn" data-section-tab="cities">Cities</button>
-        <button type="button" class="page-section-btn" data-section-tab="live">Live</button>
+        <button type="button" class="page-section-btn" data-section-tab="cities">City Reviews</button>
+        <button type="button" class="page-section-btn" data-section-tab="live">My trip</button>
         <button type="button" class="page-section-btn" data-section-tab="posts">Posts</button>
       </nav>
       <datalist id="trekstak-city-list"></datalist>
@@ -108,7 +93,6 @@
             </div>
           </div>
         </div>
-        <p class="panel-note">What followers see at the top of your creator page. Saves go live immediately — no approval.</p>
         <form id="profile-form" class="page-form" novalidate>
           <div class="form-grid">
             <label class="field field-full">
@@ -153,11 +137,14 @@
         </form>
       </section>
 
-      <section class="dash-panel page-editor-panel" data-app-view="page" data-page-section="cities" aria-labelledby="city-week-heading" hidden>
+      <section class="dash-panel dash-panel--cities page-editor-panel" data-app-view="page" data-page-section="cities" aria-labelledby="city-week-heading" hidden>
+        <div class="sheet-intro sheet-intro--cities">
+          <p class="sheet-intro-kicker">City Reviews</p>
+          <p class="sheet-intro-lead">Spotlight one city, then rate the places you&rsquo;ve covered.</p>
+        </div>
         <div class="dash-panel-head dash-panel-head--section">
           <h2 id="city-week-heading">City of the week</h2>
         </div>
-        <p class="panel-note">One rotating insight — city, photo, and tip bullets. Separate from Posts (those stay free-writing).</p>
 
         <form id="city-week-form" class="page-form" novalidate>
           <div class="form-grid">
@@ -226,12 +213,11 @@
         </form>
       </section>
 
-      <section class="dash-panel page-editor-panel" data-app-view="page" data-page-section="cities" aria-labelledby="city-reviews-heading" hidden>
+      <section class="dash-panel dash-panel--cities page-editor-panel" data-app-view="page" data-page-section="cities" aria-labelledby="city-reviews-heading" hidden>
         <div class="dash-panel-head dash-panel-head--section">
           <h2 id="city-reviews-heading">City ratings</h2>
           <button type="button" class="btn btn-primary btn-sm" id="btn-new-city-review">Add review</button>
         </div>
-        <p class="panel-note">Rate a city on up to five categories (1–5 stars) with a short why — from your trips or research.</p>
 
         <div id="city-review-editor" class="post-editor" hidden>
           <h3 id="city-review-editor-title">New city review</h3>
@@ -260,12 +246,15 @@
         <div id="city-reviews-list" class="posts-admin-list" aria-live="polite"></div>
       </section>
 
-      <section class="dash-panel page-editor-panel" data-app-view="page" data-page-section="live" aria-labelledby="live-trip-heading" hidden>
+      <section class="dash-panel dash-panel--live page-editor-panel" data-app-view="page" data-page-section="live" aria-labelledby="live-trip-heading" hidden>
+        <div class="sheet-intro sheet-intro--live">
+          <p class="sheet-intro-kicker">My trip</p>
+          <p class="sheet-intro-lead">One trip at a time — day-by-day updates with photos and short video.</p>
+        </div>
         <div class="dash-panel-head dash-panel-head--section">
-          <h2 id="live-trip-heading">Live trip</h2>
+          <h2 id="live-trip-heading">Trip shell</h2>
           <button type="button" class="btn btn-primary btn-sm" id="btn-add-live-trip-day" hidden>Add today&rsquo;s update</button>
         </div>
-        <p class="panel-note">One follow-along trip at a time — day-by-day updates with photos and uploaded video (optional link to TikTok or YouTube).</p>
 
         <div id="live-trip-status-bar" class="live-trip-status-bar" hidden>
           <span class="status-pill" id="live-trip-status-pill">Planning</span>
@@ -287,14 +276,16 @@
               <input type="text" id="live-trip-city" list="trekstak-city-list" required maxlength="80" placeholder="Start typing a city…" autocomplete="off" />
               <span class="field-hint field-hint--warn" id="live-trip-city-hint" hidden></span>
             </label>
-            <label class="field">
-              <span>Start date</span>
-              <input type="date" id="live-trip-start" />
-            </label>
-            <label class="field">
-              <span>End date</span>
-              <input type="date" id="live-trip-end-date" />
-            </label>
+            <div class="field field-full trip-dates-row">
+              <label class="field date-picker-field">
+                <span>Start date</span>
+                <input type="date" id="live-trip-start" class="date-input" />
+              </label>
+              <label class="field date-picker-field">
+                <span>End date</span>
+                <input type="date" id="live-trip-end-date" class="date-input" />
+              </label>
+            </div>
             <label class="field field-full">
               <span>Hook</span>
               <input type="text" id="live-trip-hook" maxlength="160" placeholder="Why follow along — one line." />
@@ -335,6 +326,10 @@
             <input type="hidden" id="live-trip-day-id" value="" />
             <input type="hidden" id="live-trip-day-number" value="" />
             <div class="form-grid">
+              <label class="field date-picker-field">
+                <span>Date</span>
+                <input type="date" id="live-trip-day-date" class="date-input" />
+              </label>
               <label class="field">
                 <span>Day label</span>
                 <input type="text" id="live-trip-day-label" maxlength="40" placeholder="Day 1 · Arrival" />
@@ -411,12 +406,15 @@
         </div>
       </section>
 
-      <section class="dash-panel page-editor-panel" data-app-view="page" data-page-section="posts" aria-labelledby="page-posts-heading" hidden>
+      <section class="dash-panel dash-panel--posts page-editor-panel" data-app-view="page" data-page-section="posts" aria-labelledby="page-posts-heading" hidden>
+        <div class="sheet-intro sheet-intro--posts">
+          <p class="sheet-intro-kicker">Posts</p>
+          <p class="sheet-intro-lead">Short TrekStak updates for your page — tips, codes, and trip notes.</p>
+        </div>
         <div class="dash-panel-head dash-panel-head--section">
-          <h2 id="page-posts-heading">Posts</h2>
+          <h2 id="page-posts-heading">Your posts</h2>
           <button type="button" class="btn btn-primary btn-sm" id="btn-new-post">New post</button>
         </div>
-        <p class="panel-note">Mini-blog posts on your public page — promote TrekStak here instead of flooding Instagram.</p>
 
         <div id="post-editor" class="post-editor" hidden>
           <h3 id="post-editor-title">New post</h3>
@@ -505,11 +503,21 @@
         <div id="posts-list" class="posts-admin-list" aria-live="polite"></div>
       </section>
 
+      <div id="creator-ai-root" data-app-view="ai" hidden aria-label="Creator AI"></div>
+
       <section class="dash-panel" data-app-view="tools" aria-labelledby="share-heading" hidden>
         <div class="dash-panel-head dash-panel-head--section">
           <h2 id="share-heading">Tool Kit</h2>
         </div>
         <div class="share-grid">
+          <div class="share-card share-card--promo">
+            <div class="share-card-head">
+              <strong>Your promo code</strong>
+              <button type="button" class="btn btn-primary btn-sm" id="btn-copy-code">Copy code</button>
+            </div>
+            <p class="promo-code-display" id="tools-promo-code">CODE</p>
+            <p class="promo-code-meta" id="tools-promo-discount">Discount label</p>
+          </div>
           <div class="share-card">
             <div class="share-card-head">
               <strong>Public creator page</strong>
@@ -644,12 +652,14 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="firebase-config.js?v=3"></script>
+  <script src="creator-hub-auth.js?v=2"></script>
   <script src="smooth-scroll.js?v=2"></script>
-  <script src="webapp-shell.js?v=2"></script>
-  <script src="creator-public-store.js?v=8"></script>
-  <script src="creator-image-upload.js?v=7"></script>
-  <script src="dashboard-page.js?v=17"></script>
-  <script src="dashboard.js?v=13"></script>
+  <script src="webapp-shell.js?v=3"></script>
+  <script src="creator-public-store.js?v=9"></script>
+  <script src="creator-image-upload.js?v=8"></script>
+  <script src="creator-ai.js?v=1"></script>
+  <script src="dashboard-page.js?v=18"></script>
+  <script src="dashboard.js?v=15"></script>
   <script>
     if (window.TrekStakWebApp && TrekStakWebApp.registerServiceWorker) {
       TrekStakWebApp.registerServiceWorker("sw.js");

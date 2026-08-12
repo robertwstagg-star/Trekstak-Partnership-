@@ -1091,6 +1091,85 @@
     updateCityMatchHint("live-trip-city", "live-trip-city-hint");
   }
 
+  function formatTripDate(isoDate) {
+    if (!isoDate) return "";
+    var parts = String(isoDate).split("-");
+    if (parts.length !== 3) return String(isoDate);
+    var months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ];
+    var month = months[parseInt(parts[1], 10) - 1] || parts[1];
+    return month + " " + String(parseInt(parts[2], 10)) + ", " + parts[0];
+  }
+
+  function syncLiveTripDateBounds() {
+    var start = document.getElementById("live-trip-start");
+    var endDate = document.getElementById("live-trip-end-date");
+    if (!start || !endDate) return;
+    if (start.value) {
+      endDate.min = start.value;
+      if (endDate.value && endDate.value < start.value) {
+        endDate.value = start.value;
+      }
+    } else {
+      endDate.removeAttribute("min");
+    }
+    if (endDate.value) {
+      start.max = endDate.value;
+      if (start.value && start.value > endDate.value) {
+        start.value = endDate.value;
+      }
+    } else {
+      start.removeAttribute("max");
+    }
+  }
+
+  function suggestedDayDate(dayNumber) {
+    var trip = getLiveTripFromCreator();
+    if (!trip || !trip.startDate) return "";
+    var match = String(trip.startDate).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!match) return "";
+    var date = new Date(
+      Date.UTC(parseInt(match[1], 10), parseInt(match[2], 10) - 1, parseInt(match[3], 10))
+    );
+    date.setUTCDate(date.getUTCDate() + Math.max(0, (dayNumber || 1) - 1));
+    return date.toISOString().slice(0, 10);
+  }
+
+  function bindDatePicker(input) {
+    if (!input || input.dataset.dateBound) return;
+    input.dataset.dateBound = "1";
+    input.addEventListener("click", function () {
+      if (typeof input.showPicker === "function") {
+        try {
+          input.showPicker();
+        } catch (err) {
+          /* browser may block without gesture or unsupported */
+        }
+      }
+    });
+    input.addEventListener("focus", function () {
+      if (typeof input.showPicker === "function") {
+        try {
+          input.showPicker();
+        } catch (err) {
+          /* ignore */
+        }
+      }
+    });
+  }
+
   function getLiveTripFromCreator() {
     return activeCreator && activeCreator.liveTrip ? activeCreator.liveTrip : null;
   }
@@ -1115,6 +1194,7 @@
     if (start) start.value = t ? t.startDate || "" : "";
     var endDate = document.getElementById("live-trip-end-date");
     if (endDate) endDate.value = t ? t.endDate || "" : "";
+    syncLiveTripDateBounds();
     var hook = document.getElementById("live-trip-hook");
     if (hook) hook.value = t ? t.hook || "" : "";
     var cover = document.getElementById("live-trip-cover");
@@ -1161,6 +1241,9 @@
     }
 
     var days = trip.days.slice().sort(function (a, b) {
+      if (a.date && b.date && a.date !== b.date) {
+        return String(a.date).localeCompare(String(b.date));
+      }
       return a.dayNumber - b.dayNumber;
     });
 
@@ -1175,7 +1258,11 @@
           "<div><strong>Day " +
           escapeHtml(String(day.dayNumber)) +
           (day.label ? " · " + escapeHtml(day.label) : "") +
-          "</strong></div>" +
+          "</strong>" +
+          (day.date
+            ? '<p class="post-admin-date">' + escapeHtml(formatTripDate(day.date)) + "</p>"
+            : "") +
+          "</div>" +
           '<div class="post-admin-actions">' +
           '<button type="button" class="btn btn-outline btn-sm" data-live-trip-day-action="edit">Edit</button>' +
           '<button type="button" class="btn btn-outline btn-sm" data-live-trip-day-action="delete">Delete</button>' +
@@ -1363,6 +1450,16 @@
       ? day.id
       : generatePostId(trip.id + "-day");
     document.getElementById("live-trip-day-number").value = String(dayNumber);
+    var dayDate = document.getElementById("live-trip-day-date");
+    if (dayDate) {
+      dayDate.value = day
+        ? day.date || ""
+        : suggestedDayDate(dayNumber);
+      if (trip.startDate) dayDate.min = trip.startDate;
+      else dayDate.removeAttribute("min");
+      if (trip.endDate) dayDate.max = trip.endDate;
+      else dayDate.removeAttribute("max");
+    }
     document.getElementById("live-trip-day-label").value = day
       ? day.label || "Day " + dayNumber
       : "Day " + dayNumber;
@@ -1405,6 +1502,7 @@
     var dayData = {
       id: document.getElementById("live-trip-day-id").value,
       dayNumber: parseInt(document.getElementById("live-trip-day-number").value, 10) || 1,
+      date: document.getElementById("live-trip-day-date").value.trim(),
       label: document.getElementById("live-trip-day-label").value.trim(),
       headline: headline,
       summary: document.getElementById("live-trip-day-summary").value.trim(),
@@ -1429,6 +1527,9 @@
       trip.days.push(dayData);
     }
     trip.days.sort(function (a, b) {
+      if (a.date && b.date && a.date !== b.date) {
+        return String(a.date).localeCompare(String(b.date));
+      }
       return a.dayNumber - b.dayNumber;
     });
     trip.updatedAt = new Date().toISOString();
@@ -1650,6 +1751,19 @@
       liveTripCity.addEventListener("input", updateLiveTripCityHint);
       liveTripCity.addEventListener("change", updateLiveTripCityHint);
       liveTripCity.addEventListener("blur", updateLiveTripCityHint);
+    }
+
+    var liveTripStart = document.getElementById("live-trip-start");
+    var liveTripEnd = document.getElementById("live-trip-end-date");
+    var liveTripDayDate = document.getElementById("live-trip-day-date");
+    [liveTripStart, liveTripEnd, liveTripDayDate].forEach(bindDatePicker);
+    if (liveTripStart) {
+      liveTripStart.addEventListener("change", syncLiveTripDateBounds);
+      liveTripStart.addEventListener("input", syncLiveTripDateBounds);
+    }
+    if (liveTripEnd) {
+      liveTripEnd.addEventListener("change", syncLiveTripDateBounds);
+      liveTripEnd.addEventListener("input", syncLiveTripDateBounds);
     }
 
     var clearLiveTripBtn = document.getElementById("btn-clear-live-trip");

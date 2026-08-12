@@ -1,15 +1,18 @@
 /* TrekStak Creator Studio — lightweight offline shell */
-var CACHE = "trekstak-studio-v5";
+var CACHE = "trekstak-studio-v11";
 var SHELL = [
   "/dashboard.html",
   "/styles.css",
   "/dashboard.css",
+  "/creator-ai.css",
   "/webapp-shell.css",
   "/webapp-shell.js",
   "/dashboard.js",
   "/dashboard-page.js",
   "/creator-public-store.js",
   "/creator-image-upload.js",
+  "/creator-hub-auth.js",
+  "/creator-ai.js",
   "/firebase-config.js",
   "/finallogo.png",
   "/manifest.webmanifest"

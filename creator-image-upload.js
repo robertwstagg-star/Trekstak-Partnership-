@@ -46,14 +46,32 @@
         if (!firebase.apps.length) {
           firebase.initializeApp(global.TrekStakFirebaseConfig);
         }
-        return firebase.auth().signInAnonymously();
-      })
-      .then(function () {
-        return {
-          auth: firebase.auth(),
-          storage: firebase.storage(),
-          firestore: firebase.firestore()
-        };
+        var auth = firebase.auth();
+        return new Promise(function (resolve, reject) {
+          var unsub = auth.onAuthStateChanged(
+            function (user) {
+              unsub();
+              if (user) {
+                resolve({
+                  auth: auth,
+                  storage: firebase.storage(),
+                  firestore: firebase.firestore(),
+                });
+                return;
+              }
+              auth.signInAnonymously()
+                .then(function () {
+                  resolve({
+                    auth: firebase.auth(),
+                    storage: firebase.storage(),
+                    firestore: firebase.firestore(),
+                  });
+                })
+                .catch(reject);
+            },
+            reject
+          );
+        });
       });
 
     return firebaseReady;

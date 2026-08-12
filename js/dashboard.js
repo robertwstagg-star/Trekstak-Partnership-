@@ -236,6 +236,19 @@
     return null;
   }
 
+  function findCreatorBySlug(data, slug) {
+    var normalized = String(slug || "")
+      .trim()
+      .toLowerCase();
+    var list = (data && data.creators) || [];
+    for (var i = 0; i < list.length; i++) {
+      if (String(list[i].slug).toLowerCase() === normalized) {
+        return list[i];
+      }
+    }
+    return null;
+  }
+
   function qrUrl(pageUrl) {
     return (
       "https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=10&data=" +
@@ -307,9 +320,12 @@
     var progressPct = Math.min(100, Math.round((progress / travelTarget) * 100));
     var nextPayout = creator.nextPayout || {};
 
-    document.getElementById("dash-greeting-name").textContent = creator.displayName;
-    document.getElementById("dash-role").textContent =
-      creator.role + " · " + creator.handle;
+    document.getElementById("dash-greeting-name") &&
+      (document.getElementById("dash-greeting-name").textContent = creator.displayName);
+    var roleEl = document.getElementById("dash-role");
+    if (roleEl) {
+      roleEl.textContent = creator.role + " · " + creator.handle;
+    }
 
     document.getElementById("stat-code").textContent = creator.promoCode;
     document.getElementById("stat-uses").textContent = String(stats.codeUses || 0);
@@ -318,8 +334,14 @@
     document.getElementById("stat-earned").textContent = formatMoney(stats.commissionEarned || 0);
     document.getElementById("stat-pending").textContent = formatMoney(stats.commissionPending || 0);
 
-    document.getElementById("code-hero-value").textContent = creator.promoCode;
-    document.getElementById("code-hero-discount").textContent = creator.discountLabel || "";
+    var codeHeroValue = document.getElementById("code-hero-value");
+    if (codeHeroValue) codeHeroValue.textContent = creator.promoCode;
+    var codeHeroDiscount = document.getElementById("code-hero-discount");
+    if (codeHeroDiscount) codeHeroDiscount.textContent = creator.discountLabel || "";
+    var toolsPromo = document.getElementById("tools-promo-code");
+    if (toolsPromo) toolsPromo.textContent = creator.promoCode || "—";
+    var toolsDiscount = document.getElementById("tools-promo-discount");
+    if (toolsDiscount) toolsDiscount.textContent = creator.discountLabel || "";
 
     document.getElementById("reward-count").textContent = progress + " / " + travelTarget;
     document.getElementById("reward-fill").style.width = progressPct + "%";
@@ -365,6 +387,10 @@
     if (window.DashboardPageEditor) {
       DashboardPageEditor.init(creator);
     }
+    if (window.CreatorAI) {
+      CreatorAI.init(creator);
+    }
+    initDashboardAppNav();
     } catch (err) {
       console.error("Dashboard render error", err);
     }
@@ -377,10 +403,14 @@
       copyText(pageUrl, "Public page link copied");
     }
 
-    document.getElementById("btn-copy-code").onclick = function () {
-      copyText(creator.promoCode, "Promo code copied");
-    };
-    document.getElementById("btn-copy-page").onclick = bindCopyPage;
+    var copyCodeBtn = document.getElementById("btn-copy-code");
+    if (copyCodeBtn) {
+      copyCodeBtn.onclick = function () {
+        copyText(creator.promoCode, "Promo code copied");
+      };
+    }
+    var copyPageBtn = document.getElementById("btn-copy-page");
+    if (copyPageBtn) copyPageBtn.onclick = bindCopyPage;
     var copyPageShare = document.getElementById("btn-copy-page-share");
     if (copyPageShare) copyPageShare.onclick = bindCopyPage;
     document.getElementById("btn-copy-app-store").onclick = function () {
@@ -388,8 +418,104 @@
     };
   }
 
+  function initDashboardAppNav() {
+    var nav = document.getElementById("dashboard-app-nav");
+    var scope = document.getElementById("dashboard-view");
+    if (!nav || !scope || !window.TrekStakWebApp) return;
+
+    var tabs = [
+      { id: "page", label: "Page" },
+      { id: "ai", label: "Creator AI" },
+      { id: "earn", label: "Earn" },
+      { id: "tools", label: "Tools" }
+    ];
+
+    if (!nav.dataset.ready) {
+      nav.innerHTML = TrekStakWebApp.buildNavButtons(tabs);
+      nav.dataset.ready = "1";
+      TrekStakWebApp.mountBottomNav({
+        nav: nav,
+        tabs: tabs,
+        defaultTab: "page",
+        scope: scope,
+        onChange: handleDashboardTabChange
+      });
+    }
+
+    initPageSectionNav(scope);
+    handleDashboardTabChange(parseDashboardTab());
+    initStandaloneHint();
+  }
+
+  function parseDashboardTab() {
+    var hash = (location.hash || "").replace(/^#/, "").trim().toLowerCase();
+    if (hash === "share") return "tools";
+    if (hash === "page" || hash === "earn" || hash === "tools" || hash === "ai") return hash;
+    return "page";
+  }
+
+  function handleDashboardTabChange(tabId) {
+    if (tabId === "share") tabId = "tools";
+    var sectionNav = document.getElementById("page-section-nav");
+    if (sectionNav) {
+      sectionNav.hidden = tabId !== "page";
+    }
+    if (tabId === "page") {
+      setPageSection(window._activePageSection || "profile");
+    }
+    if (tabId === "ai" && window.CreatorAI) {
+      CreatorAI.onTabShow();
+    }
+  }
+
+  function setPageSection(sectionId) {
+    var scope = document.getElementById("dashboard-view");
+    if (!scope) return;
+    window._activePageSection = sectionId;
+
+    scope.querySelectorAll(".dash-panel[data-page-section]").forEach(function (el) {
+      el.hidden = el.getAttribute("data-page-section") !== sectionId;
+    });
+
+    var sectionNav = document.getElementById("page-section-nav");
+    if (sectionNav) {
+      sectionNav.querySelectorAll(".page-section-btn").forEach(function (btn) {
+        btn.classList.toggle(
+          "is-active",
+          btn.getAttribute("data-section-tab") === sectionId
+        );
+      });
+    }
+  }
+
+  function initPageSectionNav(scope) {
+    var sectionNav = document.getElementById("page-section-nav");
+    if (!sectionNav || sectionNav.dataset.ready) return;
+    sectionNav.dataset.ready = "1";
+
+    sectionNav.querySelectorAll(".page-section-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        setPageSection(btn.getAttribute("data-section-tab"));
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    });
+
+    setPageSection(window._activePageSection || "profile");
+  }
+
+  function initStandaloneHint() {
+    var link = document.getElementById("link-open-browser");
+    if (!link) return;
+    var standalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      window.navigator.standalone === true;
+    link.hidden = !standalone;
+  }
+
   function showLogin() {
-    document.body.classList.remove("dashboard-authed");
+    document.body.classList.remove("dashboard-authed", "webapp-has-nav");
+    var nav = document.getElementById("dashboard-app-nav");
+    if (nav) nav.hidden = true;
     if (loginView) loginView.hidden = false;
     if (dashboardView) dashboardView.hidden = true;
   }
@@ -398,7 +524,51 @@
     document.body.classList.add("dashboard-authed");
     if (loginView) loginView.hidden = true;
     if (dashboardView) dashboardView.hidden = false;
+    initDashboardAppNav();
     window.scrollTo(0, 0);
+  }
+
+  function showDashboardEntry(data, creator, email) {
+    setSession(creator.id, email || creator.email);
+    return withPublicMerge(creator).then(function (merged) {
+      renderDashboard(data, merged);
+      showDashboard();
+    });
+  }
+
+  function tryLocalDemoSession(data) {
+    if (!window.CreatorHubAuth || !CreatorHubAuth.isLocalHost()) {
+      return Promise.resolve(false);
+    }
+    var session = getSession();
+    if (!session || !session.creatorId) {
+      return Promise.resolve(false);
+    }
+    var creator = findCreatorById(data, session.creatorId);
+    if (!creator) {
+      clearSession();
+      return Promise.resolve(false);
+    }
+    return showDashboardEntry(data, creator, session.email).then(function () {
+      showToast("Local preview — use email sign-in to sync to the cloud");
+      return true;
+    });
+  }
+
+  function openDashboardForActivation(data, activation) {
+    var creator =
+      findCreatorById(data, activation.creatorId) ||
+      findCreatorBySlug(data, activation.slug);
+    if (!creator) {
+      if (loginError) {
+        loginError.hidden = false;
+        loginError.textContent =
+          "Your account is registered but partner data could not be loaded. Contact partners@trekstakapp.com.";
+      }
+      showLogin();
+      return Promise.resolve();
+    }
+    return showDashboardEntry(data, creator, activation.email);
   }
 
   function boot() {
@@ -416,21 +586,27 @@
 
     loadAccounts()
       .then(function (data) {
-        var session = getSession();
-        if (!session || !session.creatorId) {
-          showLogin();
-          return;
+        if (!window.CreatorHubAuth) {
+          return tryLocalDemoSession(data).then(function (opened) {
+            if (!opened) showLogin();
+          });
         }
-        var creator = findCreatorById(data, session.creatorId);
-        if (!creator) {
-          clearSession();
-          showLogin();
-          return;
-        }
-        return withPublicMerge(creator).then(function (merged) {
-          renderDashboard(data, merged);
-          showDashboard();
-        });
+
+        return CreatorHubAuth.tryRestoreSession()
+          .then(function (activation) {
+            if (activation && (activation.creatorId || activation.slug)) {
+              return openDashboardForActivation(data, activation);
+            }
+            return tryLocalDemoSession(data).then(function (opened) {
+              if (!opened) showLogin();
+            });
+          })
+          .catch(function (err) {
+            console.warn("Creator Hub auth restore failed", err);
+            return tryLocalDemoSession(data).then(function (opened) {
+              if (!opened) showLogin();
+            });
+          });
       })
       .catch(function () {
         if (loginError) {
@@ -451,14 +627,16 @@
 
   function handleSignIn() {
     if (loginError) loginError.hidden = true;
+    var linkSent = document.getElementById("login-link-sent");
+    if (linkSent) linkSent.hidden = true;
 
     var emailInput = document.getElementById("login-email");
     var email = emailInput ? emailInput.value : "";
-    var submitBtn = loginForm ? loginForm.querySelector('[type="submit"]') : null;
+    var submitBtn = document.getElementById("login-submit");
 
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.textContent = "Signing in…";
+      submitBtn.textContent = "Sending link…";
     }
 
     loadAccounts()
@@ -472,22 +650,58 @@
           }
           return;
         }
-        setSession(creator.id, creator.email);
-        return withPublicMerge(creator).then(function (merged) {
-          renderDashboard(data, merged);
-          showDashboard();
+
+        if (!window.CreatorHubAuth) {
+          return showDashboardEntry(data, creator, creator.email);
+        }
+
+        return CreatorHubAuth.sendSignInLink(creator.email).then(function () {
+          if (linkSent) {
+            linkSent.hidden = false;
+            linkSent.textContent =
+              "Check your inbox for a sign-in link. Open it on this device to continue.";
+          }
+          if (loginForm) loginForm.hidden = true;
         });
       })
-      .catch(function () {
+      .catch(function (err) {
         if (loginError) {
           loginError.hidden = false;
-          loginError.textContent = "Could not sign in. Try again later.";
+          loginError.textContent =
+            err && err.message
+              ? err.message
+              : "Could not send sign-in link. Try again later.";
         }
       })
       .finally(function () {
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.textContent = "Sign in";
+          submitBtn.textContent = "Send sign-in link";
+        }
+      });
+  }
+
+  function handleDemoLocalPreview() {
+    if (loginError) loginError.hidden = true;
+    var linkSent = document.getElementById("login-link-sent");
+    if (linkSent) linkSent.hidden = true;
+
+    loadAccounts()
+      .then(function (data) {
+        var creator = findCreatorByEmail(data, "chris@demo.trekstakapp.com");
+        if (!creator) {
+          if (loginError) {
+            loginError.hidden = false;
+            loginError.textContent = "Demo account missing from partner data.";
+          }
+          return;
+        }
+        return showDashboardEntry(data, creator, creator.email);
+      })
+      .catch(function () {
+        if (loginError) {
+          loginError.hidden = false;
+          loginError.textContent = "Could not open demo preview.";
         }
       });
   }
@@ -505,9 +719,22 @@
   if (signOutBtn) {
     signOutBtn.addEventListener("click", function () {
       clearSession();
+      if (window.CreatorHubAuth) {
+        CreatorHubAuth.signOut().catch(function () {
+          /* ignore */
+        });
+      }
+      if (loginForm) loginForm.hidden = false;
+      var linkSent = document.getElementById("login-link-sent");
+      if (linkSent) linkSent.hidden = true;
       showLogin();
       showToast("Signed out");
     });
+  }
+
+  var demoLocalBtn = document.getElementById("btn-demo-local");
+  if (demoLocalBtn) {
+    demoLocalBtn.addEventListener("click", handleDemoLocalPreview);
   }
 
   boot();
