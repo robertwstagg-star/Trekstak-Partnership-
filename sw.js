@@ -1,5 +1,5 @@
 /* TrekStak Creator Studio — lightweight offline shell */
-var CACHE = "trekstak-studio-v19";
+var CACHE = "trekstak-studio-v20";
 var SHELL = [
   "/dashboard.html",
   "/styles.css",
@@ -17,6 +17,9 @@ var SHELL = [
   "/finallogo.png",
   "/Instagram_Glyph_Gradient.png",
   "/youtube-icon.svg",
+  "/reel-ideas-icon.svg",
+  "/hooks-captions-icon.svg",
+  "/open-brief-icon.svg",
   "/manifest.webmanifest"
 ];
 

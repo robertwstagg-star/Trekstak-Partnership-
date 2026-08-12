@@ -61,6 +61,7 @@
       id: "reel_ideas",
       label: "Reel Ideas",
       icon: "🎥",
+      iconSrc: "reel-ideas-icon.svg",
       description: "Short-form video concepts and shot lists.",
       fields: [
         { key: "destination", label: "Destination", type: "text", placeholder: "Paris" },
@@ -116,6 +117,7 @@
       id: "custom",
       label: "Open Brief",
       icon: "✨",
+      iconSrc: "open-brief-icon.svg",
       description: "Describe anything — scripts, lists, captions, or a one-off brief.",
       fields: [
         {
@@ -143,6 +145,7 @@
       id: "hooks_captions",
       label: "Hooks & Captions",
       icon: "✍️",
+      iconSrc: "hooks-captions-icon.svg",
       description: "Quick hooks, captions, and CTAs.",
       fields: [
         {
