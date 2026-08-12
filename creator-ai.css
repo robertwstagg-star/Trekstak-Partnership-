@@ -1,5 +1,11 @@
 /* Creator AI tab */
 
+#creator-ai-root:not([hidden]) {
+  display: block;
+  min-height: 12rem;
+  margin-top: 0.5rem;
+}
+
 .dash-panel--ai {
   border-color: rgba(160, 140, 255, 0.28);
   background: linear-gradient(165deg, rgba(32, 28, 48, 0.55), rgba(7, 16, 28, 0.4));
