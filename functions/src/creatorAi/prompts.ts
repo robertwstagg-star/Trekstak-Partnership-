@@ -5,7 +5,7 @@ export const TOOL_IDS = [
   "reel_ideas",
   "instagram",
   "youtube",
-  "travel_content_ideas",
+  "custom",
   "hooks_captions",
 ] as const;
 
@@ -138,17 +138,20 @@ export function buildMessages(
         maxTokens: 1800,
       };
 
-    case "travel_content_ideas":
+    case "custom":
       return {
         system,
         user: [
-          "Generate travel content ideas to grow the creator's audience (not hard-sell TrekStak).",
-          `Destination or theme: ${inputs.destination || ""}`,
-          `Number of ideas: ${inputs.count || 20}`,
-          "Group ideas in sections (e.g. Guides, Food, Tips). Each idea one short line in the body.",
-          "Do not include promo codes.",
+          "The creator wrote a custom request. Follow it closely. Choose a useful output shape (ideas, script, captions, outline, etc.) based on what they asked for.",
+          `Request: ${String(inputs.brief || "").slice(0, 2000)}`,
+          inputs.platform && inputs.platform !== "Any" ? `Platform: ${inputs.platform}` : "",
+          inputs.format && inputs.format !== "Any" ? `Format: ${inputs.format}` : "",
+          includeTrekstak
+            ? "Include TrekStak only if it fits naturally, using the promo facts."
+            : "Do not mention TrekStak, promo codes, or app links unless the request explicitly asks.",
+          "Use clear section headings. If the request is vague, still produce a practical first draft plus 2–3 variations.",
         ].join("\n"),
-        maxTokens: 1600,
+        maxTokens: 1800,
       };
 
     case "hooks_captions":

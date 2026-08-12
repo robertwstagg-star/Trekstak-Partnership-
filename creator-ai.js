@@ -110,13 +110,30 @@
       ],
     },
     {
-      id: "travel_content_ideas",
-      label: "Travel Content Ideas",
-      icon: "🗺️",
-      description: "Grow your audience — not just TrekStak ads.",
+      id: "custom",
+      label: "Custom",
+      icon: "✨",
+      description: "Describe anything — scripts, lists, captions, or a one-off brief.",
       fields: [
-        { key: "destination", label: "Destination or theme", type: "text", placeholder: "Barcelona" },
-        { key: "count", label: "Number of ideas", type: "text", placeholder: "20" },
+        {
+          key: "brief",
+          label: "What do you want?",
+          type: "textarea",
+          placeholder: "e.g. 10 packing tips for a winter trip to Tokyo, in my voice, no TrekStak pitch",
+        },
+        {
+          key: "platform",
+          label: "Platform (optional)",
+          type: "select",
+          options: ["Any", "Instagram", "TikTok", "YouTube", "Stories", "Blog / newsletter"],
+        },
+        {
+          key: "format",
+          label: "Format (optional)",
+          type: "select",
+          options: ["Any", "Ideas list", "Script", "Captions", "Carousel", "Outline"],
+        },
+        { key: "includeTrekstakCta", label: "Include TrekStak CTA", type: "checkbox" },
       ],
     },
     {
