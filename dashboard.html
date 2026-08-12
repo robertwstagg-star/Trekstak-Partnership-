@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=3" />
-  <link rel="stylesheet" href="dashboard.css?v=21" />
+  <link rel="stylesheet" href="dashboard.css?v=22" />
   <link rel="stylesheet" href="webapp-shell.css?v=3" />
   <link rel="manifest" href="manifest.webmanifest" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -90,12 +90,15 @@
       </nav>
       <datalist id="trekstak-city-list"></datalist>
 
-      <section class="dash-panel dash-panel--profile page-editor-panel" data-app-view="page" data-page-section="profile" aria-labelledby="page-profile-heading">
+      <section class="dash-panel dash-panel--profile page-editor-panel" data-app-view="page" data-page-section="profile" aria-labelledby="profile-preview-label">
         <div class="profile-preview-card" aria-label="Public profile preview">
-          <p class="profile-preview-label">Public preview</p>
+          <div class="profile-preview-top">
+            <p class="profile-preview-label" id="profile-preview-label">Your public page</p>
+            <a id="link-public-page-inline" class="profile-preview-live-link" href="#" target="_blank" rel="noopener">View live</a>
+          </div>
           <div class="profile-preview-row">
             <div class="profile-preview-avatar" id="profile-preview-avatar">
-              <img id="profile-preview-avatar-img" alt="" width="72" height="72" hidden />
+              <img id="profile-preview-avatar-img" class="profile-preview-avatar-img is-hidden" alt="" />
               <span class="profile-preview-initials" id="profile-preview-initials" aria-hidden="true">C</span>
             </div>
             <div class="profile-preview-body">
@@ -104,10 +107,6 @@
               <p class="profile-preview-bio is-placeholder" id="profile-preview-bio">Add a short bio so followers know what you're about.</p>
             </div>
           </div>
-        </div>
-        <div class="dash-panel-head dash-panel-head--section">
-          <h2 id="page-profile-heading">Profile</h2>
-          <a id="link-public-page-inline" href="#" target="_blank" rel="noopener">View live page</a>
         </div>
         <p class="panel-note">What followers see at the top of your creator page. Saves go live immediately — no approval.</p>
         <form id="profile-form" class="page-form" novalidate>
@@ -649,7 +648,7 @@
   <script src="webapp-shell.js?v=2"></script>
   <script src="creator-public-store.js?v=8"></script>
   <script src="creator-image-upload.js?v=7"></script>
-  <script src="dashboard-page.js?v=16"></script>
+  <script src="dashboard-page.js?v=17"></script>
   <script src="dashboard.js?v=13"></script>
   <script>
     if (window.TrekStakWebApp && TrekStakWebApp.registerServiceWorker) {

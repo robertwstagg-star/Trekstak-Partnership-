@@ -64,14 +64,27 @@
     }
     if (imgEl && initialsEl) {
       if (avatarUrl) {
+        imgEl.onload = function () {
+          imgEl.classList.remove("is-hidden");
+          initialsEl.classList.add("is-hidden");
+        };
+        imgEl.onerror = function () {
+          imgEl.classList.add("is-hidden");
+          initialsEl.textContent = profileInitials(activeCreator.displayName);
+          initialsEl.classList.remove("is-hidden");
+        };
         imgEl.src = avatarUrl;
-        imgEl.hidden = false;
-        initialsEl.hidden = true;
+        if (imgEl.complete && imgEl.naturalWidth > 0) {
+          imgEl.classList.remove("is-hidden");
+          initialsEl.classList.add("is-hidden");
+        }
       } else {
         imgEl.removeAttribute("src");
-        imgEl.hidden = true;
+        imgEl.onload = null;
+        imgEl.onerror = null;
+        imgEl.classList.add("is-hidden");
         initialsEl.textContent = profileInitials(activeCreator.displayName);
-        initialsEl.hidden = false;
+        initialsEl.classList.remove("is-hidden");
       }
     }
   }
