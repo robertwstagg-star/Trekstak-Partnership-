@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-08-10",
+  "updatedAt": "2026-08-12",
   "travelRewardTarget": 500,
   "travelRewardAmount": 1000,
   "creators": [
@@ -197,6 +197,49 @@
         "type": "E-transfer",
         "email": "chris@demo.trekstakapp.com",
         "note": "Update with partners@trekstakapp.com if this changes."
+      }
+    },
+    {
+      "id": "robert-stagg",
+      "slug": "robert",
+      "email": "robertwstagg@gmail.com",
+      "displayName": "Robert",
+      "handle": "@robertwstagg",
+      "role": "Founder",
+      "promoCode": "ROBERT20",
+      "discountLabel": "20% off your first year",
+      "commissionRate": 0.25,
+      "commissionLabel": "25%",
+      "publicPageUrl": "https://creators.trekstakapp.com/c/robert",
+      "appStoreUrl": "https://apps.apple.com/app/trekstak/id6758947030",
+      "bio": "",
+      "avatarUrl": "",
+      "socials": {
+        "instagram": "",
+        "tiktok": "",
+        "youtube": ""
+      },
+      "posts": [],
+      "cityReviews": [],
+      "stats": {
+        "codeUses": 0,
+        "qualifyingSubscribers": 0,
+        "subscriptionRevenue": 0,
+        "commissionEarned": 0,
+        "commissionPending": 0,
+        "travelRewardProgress": 0
+      },
+      "nextPayout": {
+        "date": "",
+        "label": "—",
+        "note": ""
+      },
+      "dailyUses": [],
+      "payouts": [],
+      "payoutMethod": {
+        "type": "E-transfer",
+        "email": "robertwstagg@gmail.com",
+        "note": ""
       }
     }
   ]
