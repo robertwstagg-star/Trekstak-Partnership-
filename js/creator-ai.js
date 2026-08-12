@@ -111,7 +111,7 @@
     },
     {
       id: "custom",
-      label: "Custom",
+      label: "Open Brief",
       icon: "✨",
       description: "Describe anything — scripts, lists, captions, or a one-off brief.",
       fields: [
