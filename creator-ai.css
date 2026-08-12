@@ -114,8 +114,10 @@
 }
 
 .creator-ai-results {
-  margin-top: 1.25rem;
-  padding-top: 1rem;
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
   padding-bottom: calc(var(--webapp-nav-h, 3.35rem) + env(safe-area-inset-bottom) + 1.5rem);
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   scroll-margin-bottom: calc(var(--webapp-nav-h, 3.35rem) + env(safe-area-inset-bottom) + 1.5rem);
@@ -127,7 +129,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.65rem;
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.15rem;
 }
 
 .creator-ai-results-head h3 {
@@ -144,9 +146,9 @@
 }
 
 .creator-ai-result-block {
-  margin-bottom: 0.75rem;
-  padding: 0.85rem 0.95rem;
-  border-radius: 0.75rem;
+  margin: 0;
+  padding: 1.15rem 1.15rem 1.25rem;
+  border-radius: 0.85rem;
   background: rgba(7, 16, 28, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -156,22 +158,73 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .creator-ai-result-head h3 {
   margin: 0;
-  font-size: 0.82rem;
-  letter-spacing: 0.04em;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: rgba(200, 180, 255, 0.95);
   font-weight: 700;
 }
 
 .creator-ai-result-body {
-  font-size: 0.92rem;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.creator-ai-result-body p {
+  margin: 0 0 0.85rem;
+}
+
+.creator-ai-result-body p:last-child,
+.creator-ai-result-body .creator-ai-list:last-child,
+.creator-ai-result-body .creator-ai-items:last-child,
+.creator-ai-result-body .creator-ai-item:last-child {
+  margin-bottom: 0;
+}
+
+.creator-ai-list {
+  margin: 0 0 0.95rem;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.creator-ai-list li::marker {
+  color: rgba(255, 196, 138, 0.9);
+}
+
+.creator-ai-items {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0 0 0.95rem;
+}
+
+.creator-ai-item {
+  padding: 0.75rem 0.85rem;
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.creator-ai-item-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(255, 196, 138, 0.95);
+  margin-bottom: 0.35rem;
+}
+
+.creator-ai-item p {
+  margin: 0;
 }
 
 @media (min-width: 640px) {

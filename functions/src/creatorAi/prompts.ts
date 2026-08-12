@@ -78,6 +78,7 @@ export function buildMessages(
     "OUTPUT FORMAT: Return valid JSON only, no markdown fences:",
     '{"title":"short result title","sections":[{"heading":"Section name","body":"content..."}]}',
     "Use multiple sections with clear headings. Use plain text in body (line breaks allowed).",
+    "Put each numbered or bulleted item on its own line. Use a blank line between paragraphs. Do not run 1. 2. 3. items together on one line.",
   ].join("\n\n");
 
   switch (toolId) {

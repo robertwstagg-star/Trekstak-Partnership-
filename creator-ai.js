@@ -215,6 +215,133 @@
       });
   }
 
+  function formatInline(text) {
+    return escapeHtml(text).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  }
+
+  function bulletKind(line) {
+    if (/^\s*\d+[.)]\s+\S/.test(line)) return "ol";
+    if (/^\s*[-*•]\s+\S/.test(line)) return "ul";
+    return "";
+  }
+
+  function stripMarker(line) {
+    return line.replace(/^\s*(?:\d+[.)]|[-*•])\s+/, "");
+  }
+
+  function labeledParts(line) {
+    var m = String(line || "").match(
+      /^\s*((?:Hook|Caption|CTA|CTAs|Shot|Slide|Title|Option|Concept|Beat|Talking point)s?\s*\d*)\s*[:—–-]\s+(.+)$/i
+    );
+    if (!m) return null;
+    return { label: m[1].trim(), text: m[2].trim() };
+  }
+
+  function maybeSplitNumberedLine(text) {
+    if (!text || !/\s\d+[.)]\s+\S/.test(text)) return null;
+    var parts = text.split(/\s+(?=\d+[.)]\s+\S)/);
+    return parts.length > 1 ? parts : null;
+  }
+
+  function formatBlock(block) {
+    var lines = String(block || "")
+      .split("\n")
+      .map(function (line) {
+        return line.replace(/\s+$/, "");
+      })
+      .filter(function (line) {
+        return line.trim();
+      });
+    if (!lines.length) return "";
+
+    var collapsed = maybeSplitNumberedLine(lines.length === 1 ? lines[0] : "");
+    if (collapsed) lines = collapsed;
+
+    var kinds = lines.map(bulletKind);
+    if (kinds.every(Boolean)) {
+      var tag = kinds.indexOf("ol") !== -1 ? "ol" : "ul";
+      return (
+        "<" +
+        tag +
+        ' class="creator-ai-list">' +
+        lines
+          .map(function (line) {
+            return "<li>" + formatInline(stripMarker(line)) + "</li>";
+          })
+          .join("") +
+        "</" +
+        tag +
+        ">"
+      );
+    }
+
+    var labels = lines.map(labeledParts);
+    if (labels.every(Boolean)) {
+      return (
+        '<div class="creator-ai-items">' +
+        labels
+          .map(function (item) {
+            return (
+              '<div class="creator-ai-item">' +
+              '<span class="creator-ai-item-label">' +
+              escapeHtml(item.label) +
+              "</span><p>" +
+              formatInline(item.text) +
+              "</p></div>"
+            );
+          })
+          .join("") +
+        "</div>"
+      );
+    }
+
+    return lines
+      .map(function (line) {
+        var numbered = maybeSplitNumberedLine(line);
+        if (numbered) {
+          return (
+            '<ol class="creator-ai-list">' +
+            numbered
+              .map(function (item) {
+                return "<li>" + formatInline(stripMarker(item)) + "</li>";
+              })
+              .join("") +
+            "</ol>"
+          );
+        }
+        var lab = labeledParts(line);
+        if (lab) {
+          return (
+            '<div class="creator-ai-item">' +
+            '<span class="creator-ai-item-label">' +
+            escapeHtml(lab.label) +
+            "</span><p>" +
+            formatInline(lab.text) +
+            "</p></div>"
+          );
+        }
+        if (bulletKind(line)) {
+          return (
+            '<ul class="creator-ai-list"><li>' +
+            formatInline(stripMarker(line)) +
+            "</li></ul>"
+          );
+        }
+        return "<p>" + formatInline(line) + "</p>";
+      })
+      .join("");
+  }
+
+  function formatResultBody(raw) {
+    return String(raw || "")
+      .replace(/\r\n/g, "\n")
+      .trim()
+      .split(/\n{2,}/)
+      .map(formatBlock)
+      .filter(Boolean)
+      .join("");
+  }
+
   function collectInputs(tool) {
     var inputs = {};
     tool.fields.forEach(function (field) {
@@ -425,7 +552,7 @@
 
     var sections = (data.result.sections || [])
       .map(function (sec, idx) {
-        var body = escapeHtml(sec.body).replace(/\n/g, "<br>");
+        var body = formatResultBody(sec.body);
         return (
           '<article class="creator-ai-result-block">' +
           '<div class="creator-ai-result-head">' +
