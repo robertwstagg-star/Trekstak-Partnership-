@@ -918,6 +918,38 @@ body.dashboard-authed .dashboard-shell {
   background: linear-gradient(135deg, rgba(254, 130, 0, 0.16), rgba(254, 130, 0, 0.06));
 }
 
+.asset-downloads {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.75rem;
+}
+
+.asset-download {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(5, 9, 18, 0.35);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.asset-download:hover {
+  border-color: rgba(254, 130, 0, 0.45);
+  color: #fff;
+}
+
+.asset-download img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: 0.3rem;
+}
+
 .promo-code-display {
   margin: 0.15rem 0 0.25rem !important;
   font-family: var(--font-display);

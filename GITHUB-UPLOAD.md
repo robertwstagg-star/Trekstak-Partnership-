@@ -47,6 +47,7 @@ Trekstak-Partnership-/
 ├── functions/                 ← Cloud Functions (Creator AI)
 ├── docs/CREATOR_AI_PHASE0.md
 ├── dashboard.html, creator-ai.js, creator-hub-auth.js, …
+├── finallogo.png, Instagram_Glyph_Gradient.png, youtube-icon.svg
 ├── data/creator-accounts.json
 └── js/                        ← mirrored scripts for Pages
 ```
@@ -85,6 +86,7 @@ creators-site/
 ├── finallogo.png
 ├── apple-badge-black.png
 ├── Instagram_Glyph_Gradient.png
+├── youtube-icon.svg
 ├── data/
 │   └── creators.json
 ├── js/
