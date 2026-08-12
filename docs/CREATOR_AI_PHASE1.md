@@ -50,7 +50,7 @@ Bottom nav: **Creator AI** tab (between Page and Earn).
 - **Functions:** `creatorAiGenerate`, `creatorAiGetUsage`
 - **Prompts:** `functions/src/creatorAi/prompts.ts`
 - **Product facts:** `functions/assets/trekstak-product.json`
-- **Model:** `gpt-4o-mini` (server-side only)
+- **Model:** `gpt-5.6` (same as the iOS Trekker Mini Guide; server-side only)
 
 ## Local testing
 

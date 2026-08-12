@@ -11,7 +11,7 @@ import {
 } from "./prompts";
 import { assertCanGenerate, getUsage, recordGeneration } from "./usage";
 
-const MODEL = "gpt-4o-mini";
+const MODEL = "gpt-5.6";
 const MAX_INPUT_CHARS = 2000;
 
 interface RegistryDoc {
@@ -90,8 +90,9 @@ async function callOpenAi(
         { role: "system", content: system },
         { role: "user", content: user },
       ],
-      max_tokens: maxTokens,
-      temperature: 0.75,
+      max_completion_tokens: maxTokens,
+      reasoning_effort: "none",
+      temperature: 0.4,
       response_format: { type: "json_object" },
     }),
   });
