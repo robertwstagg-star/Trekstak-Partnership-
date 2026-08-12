@@ -1,8 +1,39 @@
 {
-  "version": 1,
+  "version": 2,
   "updatedAt": "2026-08-12",
   "appName": "TrekStak",
   "summary": "TrekStak is a trip-planning and in-city discovery app for travelers. Creators help their audience plan days, walks, food, and trips — then redeem an Apple Offer Code for a discounted annual subscription.",
+  "branding": {
+    "slogan": "Just Tap, Stak, and Go!",
+    "oneLiner": "TrekStak is the pocket city guide that helps you figure out what to do, save the good stuff, and turn it into a day you can actually follow.",
+    "positioning": "TrekStak is for in-city travel: walks, neighborhoods, food, nightlife, family picks, viewpoints, and a day planner. It is not a hotel, flight, or booking app.",
+    "promise": "Go from “what should we do today?” to a plan you can walk.",
+    "whoItsFor": "Travelers who want a clearer day in a city — and creators who already help people plan trips.",
+    "whatItIsNot": "Not a booking engine. Not Google Maps. Not a generic worldwide guidebook dump. Do not claim hotels, flights, or reservations.",
+    "howItWorks": "Open a city, browse walks and local picks, stak (save) what you like, then build a day you can follow on the ground.",
+    "platform": "iPhone only right now.",
+    "coverageLine": "115+ cities across 50 countries. If unsure a city is in the app, say “open TrekStak and search the city.”",
+    "trialLine": "Travelers can start with a 7-day preview, then subscribe.",
+    "wordsWeUse": [
+      "Just Tap, Stak, and Go",
+      "stak (save / stack into a list or day)",
+      "self-guided walks",
+      "neighborhoods",
+      "Quick Escapes",
+      "plan a day",
+      "in your pocket"
+    ],
+    "wordsWeAvoid": [
+      "world's best",
+      "guaranteed",
+      "book your hotel",
+      "Airbnb killer",
+      "works on Android",
+      "invented walk titles or venue lists"
+    ],
+    "explain15sec": "TrekStak is a city app for planning the day you are actually in. Walks, neighborhoods, food, and a list you can follow — Just Tap, Stak, and Go.",
+    "explain60sec": "When you land in a city, the hard part is not finding a list of sights. It is turning that into a day that makes sense. TrekStak is built for that: self-guided walks with stops, neighborhood guides, food and nightlife picks, family ideas, viewpoints, and a planner so you can stak what you like and go. It is iPhone-only, with 115+ cities. It does not book hotels or flights."
+  },
   "subscription": {
     "listPriceAnnualUsd": 29.99,
     "creatorDiscountExample": "20% off first year with a creator promo code (e.g. audience pays about $23.99/year before tax)",

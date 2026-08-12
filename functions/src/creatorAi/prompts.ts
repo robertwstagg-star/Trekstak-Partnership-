@@ -70,7 +70,8 @@ export function buildMessages(
   const includeTrekstak =
     inputs.includeTrekstak === true ||
     inputs.includeTrekstakCta === true ||
-    toolId === "trekstak_content";
+    (toolId === "trekstak_content" &&
+      String(inputs.category || "") === "Promo code & download");
 
   const system = [
     baseSystem(ctx),
@@ -82,23 +83,49 @@ export function buildMessages(
   ].join("\n\n");
 
   switch (toolId) {
-    case "trekstak_content":
+    case "trekstak_content": {
+      const category = String(inputs.category || "Brand & messaging");
+      const question = String(inputs.brief || inputs.additionalContext || "").slice(0, 1200);
+      const feature = String(inputs.feature || "General app overview");
+      const destination = String(inputs.destination || "").trim();
+      const sectionGuide: Record<string, string> = {
+        "Brand & messaging":
+          "Sections: What TrekStak is, Slogan and how to use it, One-liner they can say, 30-60 second pitch, Words that fit, Words to skip.",
+        "What TrekStak is":
+          "Sections: Plain English explanation, Who it's for, What it is not, Ready-to-say version.",
+        "How it works":
+          "Sections: The idea (Tap, Stak, Go), First-time flow, Using it in a city, How a creator can mention it.",
+        Features:
+          "Sections: What this feature is, Why it matters on a trip, How to explain it, Example mention. If the feature is General app overview, cover the toolkit without inventing extras.",
+        "Audience FAQs":
+          "Sections: lead with a direct answer if they asked a question, then 5-7 FAQs as labeled Q/A lines (Question: ... then Answer: ... on the next line).",
+        "Comment & DM replies":
+          "Sections: Short replies (3-5, each on its own line), Medium reply, If they pasted a comment then Reply to that comment.",
+        "Promo code & download":
+          "Sections: How the code works (facts only), What to say, What not to promise, Ready lines they can copy.",
+        "Do's and don'ts":
+          "Sections: Say this, Don't say this, If you're unsure.",
+      };
       return {
         system,
         user: [
-          "Generate TrekStak-focused content concepts.",
-          `Destination: ${inputs.destination || "not specified"}`,
-          `TrekStak feature to highlight: ${inputs.feature || "general app"}`,
-          `Platform: ${inputs.platform || "Instagram"}`,
-          `Format: ${inputs.format || "Reel"}`,
-          `Tone: ${inputs.tone || "casual"}`,
-          inputs.additionalContext
-            ? `Additional context: ${String(inputs.additionalContext).slice(0, 800)}`
-            : "",
-          "Sections should include: Content concepts (3 bullets), Hook, Video structure, Talking points, TrekStak demonstration idea, CTA, Caption.",
-        ].join("\n"),
+          "Write an educational TrekStak resource for a creator partner.",
+          "This is a brand and product briefing, not a video recipe. Do not output shot lists, reel structure, or step-by-step content formulas.",
+          "Stay inside the PRODUCT and BRANDING facts. Do not invent features, walk titles, prices, or city coverage.",
+          `Category: ${category}`,
+          question
+            ? `Creator question or topic: ${question}`
+            : "No specific question — give a useful briefing for this category.",
+          feature && feature !== "General app overview" ? `Feature focus: ${feature}` : "",
+          destination ? `Destination context: ${destination}` : "",
+          sectionGuide[category] ||
+            "Sections: Direct answer, Ready-to-say version, Extra talking points, What not to claim.",
+        ]
+          .filter(Boolean)
+          .join("\n"),
         maxTokens: 1800,
       };
+    }
 
     case "reel_ideas":
       return {

@@ -4,6 +4,7 @@
   "use strict";
 
   var TREKSTAK_FEATURES = [
+    "General app overview",
     "Self-guided walks",
     "Neighborhoods",
     "Quick Escapes",
@@ -13,7 +14,6 @@
     "Viewpoints & gems",
     "Smart day planner",
     "Favorites / Stak lists",
-    "General app overview",
   ];
 
   var TOOLS = [
@@ -22,39 +22,37 @@
       label: "TrekStak Content",
       icon: "📱",
       iconSrc: "finallogo.png",
-      description: "Content that naturally promotes TrekStak.",
+      description: "Brand, messaging, and answers about the app.",
       fields: [
-        { key: "destination", label: "Destination", type: "text", placeholder: "Rome" },
+        {
+          key: "category",
+          label: "Category",
+          type: "select",
+          options: [
+            "Brand & messaging",
+            "What TrekStak is",
+            "How it works",
+            "Features",
+            "Audience FAQs",
+            "Comment & DM replies",
+            "Promo code & download",
+            "Do's and don'ts",
+          ],
+        },
+        {
+          key: "brief",
+          label: "Question or topic (optional)",
+          type: "textarea",
+          placeholder: "e.g. What do I say when someone asks what TrekStak is?",
+        },
         {
           key: "feature",
-          label: "TrekStak feature",
+          label: "Feature (if relevant)",
           type: "select",
           options: TREKSTAK_FEATURES,
         },
-        {
-          key: "platform",
-          label: "Platform",
-          type: "select",
-          options: ["Instagram", "TikTok", "YouTube", "Stories"],
-        },
-        {
-          key: "format",
-          label: "Format",
-          type: "select",
-          options: ["Reel", "Carousel", "Story sequence", "Post"],
-        },
-        {
-          key: "tone",
-          label: "Tone",
-          type: "select",
-          options: ["Casual / personal", "Educational", "Energetic", "Calm"],
-        },
-        {
-          key: "additionalContext",
-          label: "Extra context (optional)",
-          type: "textarea",
-          placeholder: "Anything else to include…",
-        },
+        { key: "destination", label: "Destination (optional)", type: "text", placeholder: "Rome" },
+        { key: "includeTrekstakCta", label: "Include my promo code", type: "checkbox" },
       ],
     },
     {
