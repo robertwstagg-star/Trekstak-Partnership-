@@ -80,11 +80,17 @@ export const creatorHubActivateSession = onCall(async (request) => {
 
   const now = admin.firestore.FieldValue.serverTimestamp();
   const privateRef = admin.firestore().collection("creator_hub_private").doc(slug);
+  const privateSnap = await privateRef.get();
+  const existingPrivate = privateSnap.data() || {};
+  const markPasswordSet = request.data && request.data.passwordSet === true;
+  const passwordSet = markPasswordSet || existingPrivate.passwordSet === true;
+
   await privateRef.set(
     {
       slug,
       email,
       updatedAt: now,
+      ...(markPasswordSet ? { passwordSet: true } : {}),
     },
     { merge: true }
   );
@@ -113,5 +119,6 @@ export const creatorHubActivateSession = onCall(async (request) => {
     creatorId: registry.creatorId,
     email,
     monthlyAiLimit: DEFAULT_MONTHLY_AI_LIMIT,
+    needsPasswordSetup: !passwordSet,
   };
 });

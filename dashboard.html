@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css?v=3" />
-  <link rel="stylesheet" href="dashboard.css?v=31" />
+  <link rel="stylesheet" href="dashboard.css?v=32" />
   <link rel="stylesheet" href="creator-ai.css?v=4" />
   <link rel="stylesheet" href="webapp-shell.css?v=5" />
   <link rel="manifest" href="manifest.webmanifest" />
@@ -39,7 +39,7 @@
     <!-- Login -->
     <section id="login-view" class="login-panel" aria-labelledby="login-heading">
       <h1 id="login-heading">Creator Dashboard</h1>
-      <p class="lede">Sign in with the email on your partnership agreement. We will email you a secure one-time link — no password.</p>
+      <p class="lede">Sign in with your partner email. After the first link, you can use a password next time.</p>
 
       <p id="login-error" class="login-error" hidden></p>
       <p id="login-link-sent" class="login-success" hidden></p>
@@ -47,16 +47,39 @@
       <form id="login-form" action="#" method="get" novalidate onsubmit="return false;">
         <label class="field field-full">
           <span>Email</span>
-          <input type="email" id="login-email" name="email" required autocomplete="email" placeholder="you@example.com" />
+          <input type="email" id="login-email" name="email" required autocomplete="username" placeholder="you@example.com" />
         </label>
-        <button class="btn btn-primary btn-lg form-submit" id="login-submit" type="submit" style="width:100%;margin-top:0.75rem">Send sign-in link</button>
+        <label class="field field-full">
+          <span>Password</span>
+          <input type="password" id="login-password" name="password" autocomplete="current-password" placeholder="If you already set one" />
+        </label>
+        <button class="btn btn-primary btn-lg form-submit" id="login-submit" type="submit" style="width:100%;margin-top:0.75rem">Sign in</button>
+        <p class="login-hint">First time? Leave password blank and we will email a one-time link.</p>
+        <button type="button" class="login-forgot" id="login-forgot">Forgot password?</button>
       </form>
 
       <p class="login-demo-note">
         <strong>Demo:</strong> use <code>chris@demo.trekstakapp.com</code> on production after registry seed.
         On <code>localhost</code>, use <button type="button" class="login-demo-btn" id="btn-demo-local">Preview demo locally</button> for UI-only preview (cloud save needs email sign-in).
       </p>
-      </p>
+    </section>
+
+    <section id="password-setup-view" class="login-panel" hidden aria-labelledby="password-setup-heading">
+      <h1 id="password-setup-heading">Set a password</h1>
+      <p class="lede">You are verified. Create a password so next time you can sign in without waiting for an email.</p>
+      <p id="password-setup-error" class="login-error" hidden></p>
+      <form id="password-setup-form" action="#" method="post" novalidate onsubmit="return false;">
+        <label class="field field-full">
+          <span>New password</span>
+          <input type="password" id="setup-password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" />
+        </label>
+        <label class="field field-full">
+          <span>Confirm password</span>
+          <input type="password" id="setup-password-confirm" autocomplete="new-password" minlength="8" placeholder="Repeat password" />
+        </label>
+        <button class="btn btn-primary btn-lg form-submit" id="password-setup-submit" type="submit" style="width:100%;margin-top:0.75rem">Save password</button>
+        <button type="button" class="login-forgot" id="password-setup-skip">Skip for now</button>
+      </form>
     </section>
 
     <!-- Dashboard -->
@@ -652,14 +675,14 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="firebase-config.js?v=3"></script>
-  <script src="creator-hub-auth.js?v=3"></script>
+  <script src="creator-hub-auth.js?v=4"></script>
   <script src="smooth-scroll.js?v=3"></script>
   <script src="webapp-shell.js?v=4"></script>
   <script src="creator-public-store.js?v=10"></script>
   <script src="creator-image-upload.js?v=9"></script>
   <script src="creator-ai.js?v=5"></script>
   <script src="dashboard-page.js?v=19"></script>
-  <script src="dashboard.js?v=17"></script>
+  <script src="dashboard.js?v=18"></script>
   <script>
     if (window.TrekStakWebApp && TrekStakWebApp.registerServiceWorker) {
       TrekStakWebApp.registerServiceWorker("sw.js");

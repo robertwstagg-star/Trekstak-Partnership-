@@ -122,19 +122,87 @@
         if (global.history && global.history.replaceState) {
           global.history.replaceState({}, document.title, global.location.pathname);
         }
-        return activateSession();
+        return activateSession().then(function (data) {
+          if (data) data.fromEmailLink = true;
+          return data;
+        });
       });
     });
   }
 
-  function activateSession() {
+  function mapAuthError(err) {
+    var code = err && err.code ? String(err.code) : "";
+    if (code === "auth/wrong-password" || code === "auth/invalid-credential" || code === "auth/invalid-login-credentials") {
+      return "That password did not match. Try again, or leave password blank to get a sign-in link.";
+    }
+    if (code === "auth/user-not-found") {
+      return "No password is set for this email yet. Leave password blank and we will email a sign-in link.";
+    }
+    if (code === "auth/weak-password") {
+      return "Use at least 8 characters for your password.";
+    }
+    if (code === "auth/too-many-requests") {
+      return "Too many attempts. Wait a minute, then try again.";
+    }
+    if (code === "auth/requires-recent-login") {
+      return "For security, use a fresh sign-in link before setting a password.";
+    }
+    return (err && err.message) || "Could not complete sign-in.";
+  }
+
+  function signInWithPassword(email, password) {
+    var normalized = String(email || "").trim().toLowerCase();
+    var pass = String(password || "");
+    if (!normalized) {
+      return Promise.reject(new Error("Enter your email address."));
+    }
+    if (!pass) {
+      return Promise.reject(new Error("Enter your password, or leave it blank to get a sign-in link."));
+    }
+    return ensureFirebase().then(function (fb) {
+      return fb.auth.signInWithEmailAndPassword(normalized, pass).then(function () {
+        return activateSession();
+      });
+    }).catch(function (err) {
+      return Promise.reject(new Error(mapAuthError(err)));
+    });
+  }
+
+  function setPassword(password) {
+    var pass = String(password || "");
+    if (pass.length < 8) {
+      return Promise.reject(new Error("Use at least 8 characters for your password."));
+    }
+    return ensureFirebase().then(function (fb) {
+      if (!fb.auth.currentUser) {
+        return Promise.reject(new Error("Not signed in."));
+      }
+      return fb.auth.currentUser.updatePassword(pass).then(function () {
+        return activateSession({ passwordSet: true });
+      });
+    }).catch(function (err) {
+      return Promise.reject(new Error(mapAuthError(err)));
+    });
+  }
+
+  function sendPasswordReset(email) {
+    var normalized = String(email || "").trim().toLowerCase();
+    if (!normalized) {
+      return Promise.reject(new Error("Enter your email address first."));
+    }
+    return ensureFirebase().then(function (fb) {
+      return fb.auth.sendPasswordResetEmail(normalized);
+    });
+  }
+
+  function activateSession(data) {
     return ensureFirebase()
       .then(function (fb) {
         if (!fb.auth.currentUser) {
           return Promise.reject(new Error("Not signed in."));
         }
         var callable = fb.functions.httpsCallable("creatorHubActivateSession");
-        return callable();
+        return callable(data || {});
       })
       .then(function (result) {
         return ensureFirebase().then(function (fb) {
@@ -172,6 +240,9 @@
     ensureFirebase: ensureFirebase,
     sendSignInLink: sendSignInLink,
     completeSignInFromEmailLink: completeSignInFromEmailLink,
+    signInWithPassword: signInWithPassword,
+    setPassword: setPassword,
+    sendPasswordReset: sendPasswordReset,
     activateSession: activateSession,
     tryRestoreSession: tryRestoreSession,
     getCurrentUser: getCurrentUser,

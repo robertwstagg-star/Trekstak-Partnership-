@@ -32,6 +32,7 @@ html:has(.dashboard-body) {
 }
 
 #login-view[hidden],
+#password-setup-view[hidden],
 #dashboard-view[hidden] {
   display: none !important;
 }
@@ -211,9 +212,29 @@ body.dashboard-authed .dashboard-shell {
   color: rgba(255, 255, 255, 0.82);
 }
 
-.login-demo-note code {
-  color: var(--orange);
-  font-size: 0.88em;
+.login-hint {
+  margin: 0.75rem 0 0;
+  font-size: 0.82rem;
+  color: var(--dash-hint);
+  line-height: 1.4;
+}
+
+.login-forgot {
+  display: block;
+  margin: 0.65rem auto 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #ffc48a;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.login-forgot:hover {
+  color: #fff;
 }
 
 .login-error {

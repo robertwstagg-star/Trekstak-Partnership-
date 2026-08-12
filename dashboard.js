@@ -89,11 +89,13 @@
   };
 
   var loginView = document.getElementById("login-view");
+  var passwordSetupView = document.getElementById("password-setup-view");
   var dashboardView = document.getElementById("dashboard-view");
   var loginForm = document.getElementById("login-form");
   var loginError = document.getElementById("login-error");
   var signOutBtn = document.getElementById("sign-out");
   var toastEl = document.getElementById("toast");
+  var pendingActivation = null;
 
   function escapeHtml(str) {
     return String(str == null ? "" : str)
@@ -517,12 +519,24 @@
     var nav = document.getElementById("dashboard-app-nav");
     if (nav) nav.hidden = true;
     if (loginView) loginView.hidden = false;
+    if (passwordSetupView) passwordSetupView.hidden = true;
     if (dashboardView) dashboardView.hidden = true;
+  }
+
+  function showPasswordSetup() {
+    document.body.classList.remove("dashboard-authed", "webapp-has-nav");
+    var nav = document.getElementById("dashboard-app-nav");
+    if (nav) nav.hidden = true;
+    if (loginView) loginView.hidden = true;
+    if (passwordSetupView) passwordSetupView.hidden = false;
+    if (dashboardView) dashboardView.hidden = true;
+    window.scrollTo(0, 0);
   }
 
   function showDashboard() {
     document.body.classList.add("dashboard-authed");
     if (loginView) loginView.hidden = true;
+    if (passwordSetupView) passwordSetupView.hidden = true;
     if (dashboardView) dashboardView.hidden = false;
     initDashboardAppNav();
     window.scrollTo(0, 0);
@@ -571,6 +585,15 @@
     return showDashboardEntry(data, creator, activation.email);
   }
 
+  function continueAfterAuth(data, activation) {
+    if (activation && activation.fromEmailLink && activation.needsPasswordSetup) {
+      pendingActivation = { data: data, activation: activation };
+      showPasswordSetup();
+      return Promise.resolve();
+    }
+    return openDashboardForActivation(data, activation);
+  }
+
   function boot() {
     var header = document.querySelector(".site-header");
     if (header) {
@@ -595,7 +618,7 @@
         return CreatorHubAuth.tryRestoreSession()
           .then(function (activation) {
             if (activation && (activation.creatorId || activation.slug)) {
-              return openDashboardForActivation(data, activation);
+              return continueAfterAuth(data, activation);
             }
             return tryLocalDemoSession(data).then(function (opened) {
               if (!opened) showLogin();
@@ -631,12 +654,15 @@
     if (linkSent) linkSent.hidden = true;
 
     var emailInput = document.getElementById("login-email");
+    var passwordInput = document.getElementById("login-password");
     var email = emailInput ? emailInput.value : "";
+    var password = passwordInput ? passwordInput.value : "";
     var submitBtn = document.getElementById("login-submit");
+    var usingPassword = Boolean(String(password).trim());
 
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.textContent = "Sending link…";
+      submitBtn.textContent = usingPassword ? "Signing in…" : "Sending link…";
     }
 
     loadAccounts()
@@ -655,6 +681,12 @@
           return showDashboardEntry(data, creator, creator.email);
         }
 
+        if (usingPassword) {
+          return CreatorHubAuth.signInWithPassword(creator.email, password).then(function (activation) {
+            return continueAfterAuth(data, activation);
+          });
+        }
+
         return CreatorHubAuth.sendSignInLink(creator.email).then(function () {
           if (linkSent) {
             linkSent.hidden = false;
@@ -670,13 +702,13 @@
           loginError.textContent =
             err && err.message
               ? err.message
-              : "Could not send sign-in link. Try again later.";
+              : "Could not sign in. Try again later.";
         }
       })
       .finally(function () {
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.textContent = "Send sign-in link";
+          submitBtn.textContent = "Sign in";
         }
       });
   }
@@ -719,6 +751,7 @@
   if (signOutBtn) {
     signOutBtn.addEventListener("click", function () {
       clearSession();
+      pendingActivation = null;
       if (window.CreatorHubAuth) {
         CreatorHubAuth.signOut().catch(function () {
           /* ignore */
@@ -727,8 +760,99 @@
       if (loginForm) loginForm.hidden = false;
       var linkSent = document.getElementById("login-link-sent");
       if (linkSent) linkSent.hidden = true;
+      var passwordInput = document.getElementById("login-password");
+      if (passwordInput) passwordInput.value = "";
       showLogin();
       showToast("Signed out");
+    });
+  }
+
+  var passwordSetupForm = document.getElementById("password-setup-form");
+  if (passwordSetupForm) {
+    passwordSetupForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      var errEl = document.getElementById("password-setup-error");
+      if (errEl) errEl.hidden = true;
+      var pass = (document.getElementById("setup-password") || {}).value || "";
+      var confirm = (document.getElementById("setup-password-confirm") || {}).value || "";
+      if (pass.length < 8) {
+        if (errEl) {
+          errEl.hidden = false;
+          errEl.textContent = "Use at least 8 characters.";
+        }
+        return;
+      }
+      if (pass !== confirm) {
+        if (errEl) {
+          errEl.hidden = false;
+          errEl.textContent = "Those passwords do not match.";
+        }
+        return;
+      }
+      var btn = document.getElementById("password-setup-submit");
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Saving…";
+      }
+      CreatorHubAuth.setPassword(pass)
+        .then(function () {
+          var pending = pendingActivation;
+          pendingActivation = null;
+          showToast("Password saved");
+          if (pending) {
+            return openDashboardForActivation(pending.data, pending.activation);
+          }
+          showLogin();
+        })
+        .catch(function (err) {
+          if (errEl) {
+            errEl.hidden = false;
+            errEl.textContent = (err && err.message) || "Could not save password.";
+          }
+        })
+        .finally(function () {
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = "Save password";
+          }
+        });
+    });
+  }
+
+  var skipPasswordBtn = document.getElementById("password-setup-skip");
+  if (skipPasswordBtn) {
+    skipPasswordBtn.addEventListener("click", function () {
+      var pending = pendingActivation;
+      pendingActivation = null;
+      if (pending) {
+        openDashboardForActivation(pending.data, pending.activation);
+      } else {
+        showLogin();
+      }
+    });
+  }
+
+  var forgotBtn = document.getElementById("login-forgot");
+  if (forgotBtn) {
+    forgotBtn.addEventListener("click", function () {
+      if (loginError) loginError.hidden = true;
+      var linkSent = document.getElementById("login-link-sent");
+      var emailInput = document.getElementById("login-email");
+      var email = emailInput ? emailInput.value : "";
+      if (!window.CreatorHubAuth) return;
+      CreatorHubAuth.sendPasswordReset(email)
+        .then(function () {
+          if (linkSent) {
+            linkSent.hidden = false;
+            linkSent.textContent = "If a password exists for that email, a reset link is on the way.";
+          }
+        })
+        .catch(function (err) {
+          if (loginError) {
+            loginError.hidden = false;
+            loginError.textContent = (err && err.message) || "Could not send reset email.";
+          }
+        });
     });
   }
 
