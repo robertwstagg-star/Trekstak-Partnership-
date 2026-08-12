@@ -6,7 +6,10 @@
   margin-top: 0.5rem;
 }
 
-.dash-panel--ai {
+.dash-panel--ai .dash-panel-head--section {
+  flex-wrap: wrap;
+  row-gap: 0.35rem;
+}
   border-color: rgba(160, 140, 255, 0.28);
   background: linear-gradient(165deg, rgba(32, 28, 48, 0.55), rgba(7, 16, 28, 0.4));
 }
@@ -89,7 +92,9 @@
 .creator-ai-results {
   margin-top: 1.25rem;
   padding-top: 1rem;
+  padding-bottom: calc(var(--webapp-nav-h, 3.35rem) + env(safe-area-inset-bottom) + 1.5rem);
   border-top: 1px solid rgba(255, 255, 255, 0.12);
+  scroll-margin-bottom: calc(var(--webapp-nav-h, 3.35rem) + env(safe-area-inset-bottom) + 1.5rem);
 }
 
 .creator-ai-results-head {

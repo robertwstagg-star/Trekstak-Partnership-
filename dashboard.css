@@ -1015,7 +1015,7 @@ body.dashboard-authed .dashboard-shell {
 
 .toast {
   position: fixed;
-  bottom: 1.25rem;
+  bottom: calc(var(--webapp-nav-h, 3.35rem) + env(safe-area-inset-bottom) + 1rem);
   left: 50%;
   transform: translateX(-50%) translateY(120%);
   padding: 0.65rem 1.1rem;
@@ -1026,8 +1026,10 @@ body.dashboard-authed .dashboard-shell {
   font-weight: 600;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
   transition: transform 0.25s ease;
-  z-index: 100;
+  z-index: 300;
   pointer-events: none;
+  max-width: calc(100vw - 2rem);
+  text-align: center;
 }
 
 .toast.is-visible {
@@ -1537,6 +1539,10 @@ body.dashboard-authed .dashboard-shell {
   width: 100%;
   min-width: 0;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.page-section-nav[hidden] {
+  display: none !important;
 }
 
 .page-section-nav-label {

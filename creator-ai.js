@@ -451,7 +451,7 @@
       runGenerate(true);
     });
 
-    container.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    container.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function init(creator) {

@@ -451,7 +451,7 @@
       runGenerate(true);
     });
 
-    container.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    container.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function init(creator) {
@@ -462,9 +462,12 @@
   }
 
   function onTabShow() {
-    if (!rootEl) rootEl = document.getElementById("creator-ai-root");
+    rootEl = document.getElementById("creator-ai-root");
     if (!rootEl) return;
-    if (!currentToolId) renderLanding();
+    if (!rootEl.querySelector(".creator-ai-grid")) {
+      currentToolId = null;
+      renderLanding();
+    }
     refreshUsage();
   }
 
