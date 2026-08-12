@@ -21,6 +21,7 @@
       id: "trekstak_content",
       label: "TrekStak Content",
       icon: "📱",
+      iconSrc: "finallogo.png",
       description: "Content that naturally promotes TrekStak.",
       fields: [
         { key: "destination", label: "Destination", type: "text", placeholder: "Rome" },
@@ -83,6 +84,7 @@
       id: "instagram",
       label: "Instagram",
       icon: "📸",
+      iconSrc: "Instagram_Glyph_Gradient.png",
       description: "Posts, carousels, Stories, and captions.",
       fields: [
         {
@@ -98,6 +100,7 @@
       id: "youtube",
       label: "YouTube",
       icon: "🎬",
+      iconSrc: "youtube-icon.svg",
       description: "Titles, hooks, outlines, and descriptions.",
       fields: [
         {
@@ -174,6 +177,17 @@
     if (global.showDashboardToast) global.showDashboardToast(msg);
   }
 
+  function toolIconHtml(tool) {
+    if (tool.iconSrc) {
+      return (
+        '<img src="' +
+        escapeHtml(tool.iconSrc) +
+        '" alt="" width="28" height="28" />'
+      );
+    }
+    return escapeHtml(tool.icon || "");
+  }
+
   function callFunction(name, data) {
     if (!global.CreatorHubAuth) {
       return Promise.reject(new Error("Sign in with your email link to use Creator AI."));
@@ -220,7 +234,7 @@
         escapeHtml(tool.id) +
         '">' +
         '<span class="creator-ai-card-icon" aria-hidden="true">' +
-        tool.icon +
+        toolIconHtml(tool) +
         "</span>" +
         '<span class="creator-ai-card-label">' +
         escapeHtml(tool.label) +
@@ -328,8 +342,11 @@
       '<section class="dash-panel dash-panel--ai">' +
       '<div class="dash-panel-head dash-panel-head--section">' +
       '<button type="button" class="btn btn-ghost btn-sm creator-ai-back">← All tools</button>' +
-      "<h2>" +
-      escapeHtml(tool.icon + " " + tool.label) +
+      '<h2 class="creator-ai-tool-title">' +
+      '<span class="creator-ai-card-icon" aria-hidden="true">' +
+      toolIconHtml(tool) +
+      "</span>" +
+      escapeHtml(tool.label) +
       "</h2>" +
       '<span class="creator-ai-usage" id="creator-ai-usage"></span>' +
       "</div>" +

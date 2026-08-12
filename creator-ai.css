@@ -6,12 +6,14 @@
   margin-top: 0.5rem;
 }
 
+.dash-panel--ai {
+  border-color: rgba(160, 140, 255, 0.28);
+  background: linear-gradient(165deg, rgba(32, 28, 48, 0.55), rgba(7, 16, 28, 0.4));
+}
+
 .dash-panel--ai .dash-panel-head--section {
   flex-wrap: wrap;
   row-gap: 0.35rem;
-}
-  border-color: rgba(160, 140, 255, 0.28);
-  background: linear-gradient(165deg, rgba(32, 28, 48, 0.55), rgba(7, 16, 28, 0.4));
 }
 
 .creator-ai-usage {
@@ -52,9 +54,31 @@
 }
 
 .creator-ai-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
   font-size: 1.35rem;
   line-height: 1;
   grid-row: span 2;
+}
+
+.creator-ai-card-icon img {
+  width: 1.75rem;
+  height: 1.75rem;
+  object-fit: contain;
+  display: block;
+}
+
+.creator-ai-tool-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.creator-ai-tool-title .creator-ai-card-icon {
+  grid-row: auto;
 }
 
 .creator-ai-card-label {
